@@ -31,6 +31,9 @@ public class Simulation extends JPanel implements Runnable {
 	private static MouseHandler mouseHandler;
 	private static boolean key_control;
 	
+	private static int topOffsetUI;
+	private static int offsetUI;
+	
 	// GUI
 	public static ArrayList<Button> buttons = new ArrayList<Button>();
 	private static BottomBar bottomBar;
@@ -52,31 +55,40 @@ public class Simulation extends JPanel implements Runnable {
 		renderMap.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
 		
 		setPreferredSize(d);
+		addMouseListener(mouseHandler);
+		addMouseMotionListener(mouseHandler);
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Point wp = new Point((int) (screenSize.getWidth() - d.getWidth()) / 2, (int) (screenSize.getHeight() - d.getHeight()) / 2);
 		
-		frame = new JFrame("Feuerwehr Planspiel Simulation " + VERSION);
-		frame.addKeyListener(keyHandler);
-		frame.addMouseListener(mouseHandler);
-		frame.addMouseMotionListener(mouseHandler);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		frame.setMinimumSize(new Dimension(640, 480));
-		frame.add(this);
-		frame.pack();
-		frame.setLocation(wp);
-		
 		// GUI
 		bottomBar = new BottomBar(0, 30);
+		
+		frame = new JFrame("Feuerwehr Planspiel Simulation " + VERSION);
+		frame.addKeyListener(keyHandler);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		frame.add(this);
+		frame.pack();
+		frame.setLocation(wp);		
+		frame.setMinimumSize(new Dimension(640 + frame.getInsets().left + frame.getInsets().right, 480 + frame.getInsets().top + frame.getInsets().bottom));
 	}
 	
 	public void run() {
 		long lastRunned = System.currentTimeMillis();
 		while(frame.isVisible()) {
-			if(frame.isActive() && !isPaused()) {
+			if(!frame.isActive()) {
+				setPaused(true);
+			} else {
+				setPaused(false);
+			}
+			
+			if(!isPaused()) {
 				simTime += System.currentTimeMillis() - lastRunned;
 			}
+			
+			// GUI
+			bottomBar.update();
 			
 			repaint();
 			lastRunned = System.currentTimeMillis();
@@ -98,7 +110,7 @@ public class Simulation extends JPanel implements Runnable {
 		
 		bottomBar.draw(g);
 		
-		if(!frame.isActive() || isPaused()) {
+		if(isPaused()) {
 			GraphicsUtil.setAlpha(g, 0.4f);
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, getWidth(), getHeight());
@@ -150,7 +162,7 @@ public class Simulation extends JPanel implements Runnable {
 		
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			saveMouse(e);
+			mouse = e.getPoint();
         	
 			for(Button b : buttons) {
 	        	if(b.contains(mouse)) {
@@ -163,19 +175,13 @@ public class Simulation extends JPanel implements Runnable {
 		
 		@Override
 		public void mousePressed(MouseEvent e) {
-			saveMouse(e);
+			mouse = e.getPoint();
 			
 			for(Button b : buttons) {
 				if(b.contains(mouse)) {
 					b.press(e.getButton());
 				}
 			}
-		}
-		
-		public void saveMouse(MouseEvent e) {
-			mouse = e.getPoint();
-			mouse.x -= 8;
-			mouse.y -= 30;
 		}
 	}
 	
@@ -199,6 +205,14 @@ public class Simulation extends JPanel implements Runnable {
 	
 	public static void setPaused(boolean paused) {
 		Simulation.paused = paused;
+	}
+
+	public static int getTopOffsetUI() {
+		return topOffsetUI;
+	}
+
+	public static int getOffsetUI() {
+		return offsetUI;
 	}
 
 	/*

@@ -1,6 +1,7 @@
 package net.gerritk.fdsim.gui;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 
 public abstract class InterfaceObject extends Rectangle {	
@@ -16,6 +17,15 @@ public abstract class InterfaceObject extends Rectangle {
 	public abstract void update();
 	
 	public abstract void draw(Graphics2D g);
+	
+	@Override
+	public boolean contains(Point p) {
+		if(p.getX() >= getX() && p.getX() <= getX() + getWidth() && p.getY() >= getY() && p.getY() <= getY() + getHeight()) {
+			return true;
+		}
+		
+		return false;
+	}
 	
 	/*
 	 * Getter & Setter
