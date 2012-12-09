@@ -1,34 +1,48 @@
 package net.gerritk.fdsim;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.*;
 
+import net.gerritk.fdsim.gui.Button;
+import net.gerritk.fdsim.gui.objects.*;
 import net.gerritk.util.*;
 
-public class Simulation extends JPanel implements Runnable, KeyListener {
+public class Simulation extends JPanel implements Runnable {
 	private static final long serialVersionUID = 3904671781449439735L;
 	
-	public static final String VERSION = "0.0.1 DEV", COPY = "(c) K.Design 2012 - Gerrit Kaul - Feuerwehr Braunschweig";
+	public static final String VERSION = "0.0.1 DEV", COPY = "(c) 2012 - K.Design - Gerrit Kaul - Feuerwehr Braunschweig";
 	public static final int MODE_EXPERT = 0, MODE_SIMPLE = 1;
 	
-	private JFrame frame;
-	private Map<RenderingHints.Key, Object> renderMap;
-	private int mode;
-	private boolean paused;
-	private OwnFont clockFont;
-	private long simTime;
+	public static Simulation instance;
+	public static OwnFont clockFont;
+	public static long simTime;
 	
-	private boolean key_control;
+	private static JFrame frame;
+	private static Map<RenderingHints.Key, Object> renderMap;
+	private static int mode;
+	private static boolean paused;
+	
+	private static KeyHandler keyHandler;
+	private static MouseHandler mouseHandler;
+	private static boolean key_control;
+	
+	// GUI
+	public static ArrayList<Button> buttons = new ArrayList<Button>();
+	private static BottomBar bottomBar;
 	
 	public Simulation(Dimension d, int mode) {
-		this.mode = mode;
+		setMode(mode);
 		simTime = -60 * 60 * 1000;
 		
+		keyHandler = new KeyHandler();
+		mouseHandler = new MouseHandler();
+		
+		// FONT
 		clockFont = new OwnFont("DS-DIGIT.TTF", Font.TRUETYPE_FONT);
 		
 		renderMap = new HashMap<RenderingHints.Key, Object>();
@@ -43,13 +57,18 @@ public class Simulation extends JPanel implements Runnable, KeyListener {
 		Point wp = new Point((int) (screenSize.getWidth() - d.getWidth()) / 2, (int) (screenSize.getHeight() - d.getHeight()) / 2);
 		
 		frame = new JFrame("Feuerwehr Planspiel Simulation " + VERSION);
-		frame.addKeyListener(this);
+		frame.addKeyListener(keyHandler);
+		frame.addMouseListener(mouseHandler);
+		frame.addMouseMotionListener(mouseHandler);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
 		frame.setVisible(true);
+		frame.setMinimumSize(new Dimension(640, 480));
 		frame.add(this);
 		frame.pack();
 		frame.setLocation(wp);
+		
+		// GUI
+		bottomBar = new BottomBar(0, 30);
 	}
 	
 	public void run() {
@@ -77,29 +96,7 @@ public class Simulation extends JPanel implements Runnable, KeyListener {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
-		g.setColor(Color.DARK_GRAY);
-		g.fillRect(0, getHeight() - 30, getWidth(), 30);
-		
-		g.setColor(Color.RED);
-		g.drawLine(0, getHeight() - 30, getWidth(), getHeight() - 30);
-		g.drawLine(124, getHeight() - 30, 124, getHeight());
-		g.drawLine(getWidth() - 124, getHeight() - 30, getWidth() - 124, getHeight());
-		
-		// CLOCK
-		g.setColor(Color.RED);
-		g.setFont(clockFont.getFont(30));
-		g.drawString(TimeUtil.formatMillis(simTime), 10, getHeight() - 5);
-		
-		// COPY
-		g.setColor(Color.LIGHT_GRAY);
-		g.setFont(new Font("Verdana", Font.PLAIN, 8));
-		g.drawString(COPY, getWidth() - StringUtil.getWidth(COPY, g) - 2, StringUtil.getHeight(COPY, g));
-		
-		// MODE
-		g.setColor(Color.WHITE);
-		g.setFont(new Font("Verdana", Font.PLAIN, 12));
-		String m = "Modus: " + (mode == MODE_EXPERT ? "Experte" : "Einsteiger");
-		g.drawString(m, getWidth() - 120, getHeight() - 2);
+		bottomBar.draw(g);
 		
 		if(!frame.isActive() || isPaused()) {
 			GraphicsUtil.setAlpha(g, 0.4f);
@@ -110,60 +107,100 @@ public class Simulation extends JPanel implements Runnable, KeyListener {
 			g.setFont(new Font("Verdana", Font.BOLD, 24));
 			g.drawString("Pausiert", (getWidth() - StringUtil.getWidth("Pausiert", g)) / 2, (getHeight() - StringUtil.getHeight("Pausiert", g)) / 2);
 		}
+		
+		// COPY
+		g.setColor(Color.LIGHT_GRAY);
+		g.setFont(new Font("Verdana", Font.PLAIN, 8));
+		g.drawString(COPY, getWidth() - StringUtil.getWidth(COPY, g) - 2, StringUtil.getHeight(COPY, g));
 	}
 	
 	/*
-	 * KeyListener
-	 */
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_CONTROL) {
-			key_control = true;
+	 * KeyHandler
+	 */	
+	public class KeyHandler extends KeyAdapter {
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if(e.getKeyCode() == KeyEvent.VK_CONTROL) {
+				key_control = true;
+			}
 		}
-	}
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_P) {
-			setPaused(!isPaused());
-		} else if(e.getKeyCode() == KeyEvent.VK_CONTROL) {
-			key_control = false;
-		}
-		
-		if(key_control) {
-			if(e.getKeyChar() >= 48 && e.getKeyChar() <= 57) {
-				int mode = e.getKeyChar() - 49;			
-				setMode(mode == -1 ? 9 : mode);
+		@Override
+		public void keyReleased(KeyEvent e) {
+			if(e.getKeyCode() == KeyEvent.VK_P) {
+				setPaused(!isPaused());
+			} else if(e.getKeyCode() == KeyEvent.VK_CONTROL) {
+				key_control = false;
+			}
+			
+			if(key_control) {
+				if(e.getKeyChar() >= 48 && e.getKeyChar() <= 57) {
+					int mode = e.getKeyChar() - 49;			
+					setMode(mode == -1 ? 9 : mode);
+				}
 			}
 		}
 	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
+	
+	/*
+	 * MouseHandler
+	 */
+	public class MouseHandler extends MouseAdapter {
+		public Point mouse;
+		
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			saveMouse(e);
+        	
+			for(Button b : buttons) {
+	        	if(b.contains(mouse)) {
+	        		b.setHover(true);
+	        	} else if(b.isHover()) {
+	        		b.setHover(false);
+	        	}
+			}
+		}
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+			saveMouse(e);
+			
+			for(Button b : buttons) {
+				if(b.contains(mouse)) {
+					b.press(e.getButton());
+				}
+			}
+		}
+		
+		public void saveMouse(MouseEvent e) {
+			mouse = e.getPoint();
+			mouse.x -= 8;
+			mouse.y -= 30;
+		}
 	}
 	
 	/*
 	 * Getter & Setter
 	 */
-	public int getMode() {
+	public static int getMode() {
 		return mode;
 	}
 	
-	public void setMode(int mode) {
+	public static void setMode(int mode) {
 		if(mode >= MODE_EXPERT && mode <= MODE_SIMPLE) {
-			this.mode = mode;
-			// TODO Repaint & Update!
+			Simulation.mode = mode;
+			// TODO Repaint & Update?
 		}
 	}
 	
-	public boolean isPaused() {
+	public static boolean isPaused() {
 		return paused;
 	}
 	
-	public void setPaused(boolean paused) {
-		this.paused = paused;
+	public static void setPaused(boolean paused) {
+		Simulation.paused = paused;
 	}
-	
+
 	/*
 	 * MAIN-METHOD
 	 */
@@ -193,7 +230,7 @@ public class Simulation extends JPanel implements Runnable, KeyListener {
 			}
 		}
 		
-		Simulation instance = new Simulation(new Dimension(width, height), mode);
+		instance = new Simulation(new Dimension(width, height), mode);
 		
 		instance.run();
 	}
