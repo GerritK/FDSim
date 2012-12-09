@@ -18,9 +18,10 @@ public class Simulation extends JPanel implements Runnable {
 	public static final String VERSION = "0.0.1 DEV", COPY = "(c) 2012 - K.Design - Gerrit Kaul - Feuerwehr Braunschweig";
 	public static final int MODE_EXPERT = 0, MODE_SIMPLE = 1;
 	
-	public static Simulation instance;
-	public static OwnFont clockFont;
-	public static long simTime;
+	private static Simulation instance;
+	private static Playground playground;
+	private static OwnFont clockFont;
+	private static long simTime;
 	
 	private static JFrame frame;
 	private static Map<RenderingHints.Key, Object> renderMap;
@@ -29,10 +30,9 @@ public class Simulation extends JPanel implements Runnable {
 	
 	private static KeyHandler keyHandler;
 	private static MouseHandler mouseHandler;
+	private static ButtonHandler buttonHandler;
+	private static FrameHandler frameHandler;
 	private static boolean key_control;
-	
-	private static int topOffsetUI;
-	private static int offsetUI;
 	
 	// GUI
 	public static ArrayList<Button> buttons = new ArrayList<Button>();
@@ -44,6 +44,8 @@ public class Simulation extends JPanel implements Runnable {
 		
 		keyHandler = new KeyHandler();
 		mouseHandler = new MouseHandler();
+		buttonHandler = new ButtonHandler();
+		frameHandler = new FrameHandler();
 		
 		// FONT
 		clockFont = new OwnFont("DS-DIGIT.TTF", Font.TRUETYPE_FONT);
@@ -66,6 +68,7 @@ public class Simulation extends JPanel implements Runnable {
 		
 		frame = new JFrame("Feuerwehr Planspiel Simulation " + VERSION);
 		frame.addKeyListener(keyHandler);
+		frame.addComponentListener(frameHandler);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.add(this);
@@ -74,16 +77,23 @@ public class Simulation extends JPanel implements Runnable {
 		frame.setMinimumSize(new Dimension(640 + frame.getInsets().left + frame.getInsets().right, 480 + frame.getInsets().top + frame.getInsets().bottom));
 	}
 	
+	public static void reset() {
+		System.out.println("I'm now resetted!");
+		// TODO Reset Simulation
+	}
+	
 	public void run() {
 		long lastRunned = System.currentTimeMillis();
-		while(frame.isVisible()) {
-			if(!frame.isActive()) {
-				setPaused(true);
-			} else {
-				setPaused(false);
-			}
-			
+
+		// TODO PLAYGROUND
+		playground = new Playground("Test", new Dimension(1024, 512), new Point(100, 200));
+		
+		while(frame.isVisible()) {			
 			if(!isPaused()) {
+				if(playground != null) {
+					playground.update();
+				}
+				
 				simTime += System.currentTimeMillis() - lastRunned;
 			}
 			
@@ -94,7 +104,7 @@ public class Simulation extends JPanel implements Runnable {
 			lastRunned = System.currentTimeMillis();
 			
 			try {
-				Thread.sleep(1000 / 15);
+				Thread.sleep(1000 / 100);
 			} catch(InterruptedException e) {
 				// Nothing?
 			}
@@ -105,23 +115,35 @@ public class Simulation extends JPanel implements Runnable {
 		Graphics2D g = (Graphics2D) gra;
 		g.setRenderingHints(renderMap);
 		
-		g.setColor(Color.WHITE);
+		g.setColor(Color.DARK_GRAY);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
+		// PLAYGROUND
+		if(playground != null) {
+			playground.draw(g);
+		}
+		
+		// GUI
 		bottomBar.draw(g);
 		
 		if(isPaused()) {
+			String paused = "Pausiert";
+			String pausedInfo = "Drücken Sie 'P' oder den Pausieren-Knopf zum Fortfahren.";
+			
 			GraphicsUtil.setAlpha(g, 0.4f);
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, getWidth(), getHeight());
 			GraphicsUtil.setAlpha(g, 1);
 			g.setColor(Color.RED);
 			g.setFont(new Font("Verdana", Font.BOLD, 24));
-			g.drawString("Pausiert", (getWidth() - StringUtil.getWidth("Pausiert", g)) / 2, (getHeight() - StringUtil.getHeight("Pausiert", g)) / 2);
+			g.drawString(paused, (getWidth() - StringUtil.getWidth(paused, g)) / 2, (getHeight() - StringUtil.getHeight(paused, g)) / 2);
+			g.setColor(Color.WHITE);
+			g.setFont(new Font("Verdana", Font.ITALIC, 14));
+			g.drawString(pausedInfo, (getWidth() - StringUtil.getWidth(pausedInfo, g)) / 2, (getHeight() + StringUtil.getHeight(pausedInfo, g)) / 2);
 		}
 		
 		// COPY
-		g.setColor(Color.LIGHT_GRAY);
+		g.setColor(Color.GRAY);
 		g.setFont(new Font("Verdana", Font.PLAIN, 8));
 		g.drawString(COPY, getWidth() - StringUtil.getWidth(COPY, g) - 2, StringUtil.getHeight(COPY, g));
 	}
@@ -141,6 +163,8 @@ public class Simulation extends JPanel implements Runnable {
 		public void keyReleased(KeyEvent e) {
 			if(e.getKeyCode() == KeyEvent.VK_P) {
 				setPaused(!isPaused());
+			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				frame.dispose();
 			} else if(e.getKeyCode() == KeyEvent.VK_CONTROL) {
 				key_control = false;
 			}
@@ -160,9 +184,13 @@ public class Simulation extends JPanel implements Runnable {
 	public class MouseHandler extends MouseAdapter {
 		public Point mouse;
 		
+		private Point lastDrag;
+		private boolean mousebutton[] = new boolean[3];
+		
 		@Override
 		public void mouseMoved(MouseEvent e) {
 			mouse = e.getPoint();
+			lastDrag = mouse;
         	
 			for(Button b : buttons) {
 	        	if(b.contains(mouse)) {
@@ -170,6 +198,18 @@ public class Simulation extends JPanel implements Runnable {
 	        	} else if(b.isHover()) {
 	        		b.setHover(false);
 	        	}
+			}
+		}
+		
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			if(mousebutton[2] && !isPaused()) {
+				Point drag = e.getPoint();
+				
+				playground.setOffsetX(playground.getOffsetX() + drag.x - lastDrag.x);
+				playground.setOffsetY(playground.getOffsetY() + drag.y - lastDrag.y);
+				
+				lastDrag = drag;
 			}
 		}
 		
@@ -182,12 +222,65 @@ public class Simulation extends JPanel implements Runnable {
 					b.press(e.getButton());
 				}
 			}
+			
+			if(e.getButton() != MouseEvent.NOBUTTON) {
+				mousebutton[e.getButton() - 1] = true;
+			}
+		}
+		
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if(e.getButton() != MouseEvent.NOBUTTON) {
+				mousebutton[e.getButton() - 1] = false;
+			}
+		}
+	}
+	
+	/*
+	 * ButtonHandler
+	 */
+	public class ButtonHandler implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String cmd = e.getActionCommand();
+			
+			if(cmd.equals("pause")) {
+				setPaused(!isPaused());
+			} else if (cmd.equals("reset")) {
+				reset();
+			}
+		}
+	}
+	
+	/*
+	 * FrameHandler
+	 */
+	public class FrameHandler extends ComponentAdapter {
+		@Override
+		public void componentResized(ComponentEvent e) {
+			playground.updateOffset();
 		}
 	}
 	
 	/*
 	 * Getter & Setter
 	 */
+	public static Simulation getInstance() {
+		return instance;
+	}
+	
+	public static Playground getPlayground() {
+		return playground;
+	}
+	
+	public static long getSimulationTime() {
+		return simTime;
+	}
+	
+	public static OwnFont getClockFont() {
+		return clockFont;
+	}
+	
 	public static int getMode() {
 		return mode;
 	}
@@ -200,21 +293,25 @@ public class Simulation extends JPanel implements Runnable {
 	}
 	
 	public static boolean isPaused() {
-		return paused;
+		return Simulation.paused;
 	}
 	
 	public static void setPaused(boolean paused) {
 		Simulation.paused = paused;
 	}
-
-	public static int getTopOffsetUI() {
-		return topOffsetUI;
+	
+	public static KeyHandler getKeyHandler() {
+		return keyHandler;
 	}
-
-	public static int getOffsetUI() {
-		return offsetUI;
+	
+	public static MouseHandler getMouseHandler() {
+		return mouseHandler;
 	}
-
+	
+	public static ButtonHandler getButtonHandler() {
+		return buttonHandler;
+	}
+	
 	/*
 	 * MAIN-METHOD
 	 */

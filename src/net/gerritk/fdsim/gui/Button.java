@@ -2,14 +2,19 @@ package net.gerritk.fdsim.gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import net.gerritk.util.GraphicsUtil;
 
-public abstract class Button extends InterfaceObject {
+public class Button extends InterfaceObject {
 	private static final long serialVersionUID = -2273998620740218304L;
 	
 	private boolean hover;
 	private Color cText, cNormal, cHover;
+	private String actionCmd[] = new String[3];
+	private ArrayList<ActionListener> al = new ArrayList<ActionListener>();
 	
 	public Button(int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, InterfaceObject ref) {
 		super(x, y, width, height, ref);
@@ -29,6 +34,8 @@ public abstract class Button extends InterfaceObject {
 	
 	@Override
 	public void draw(Graphics2D g) {
+		if(!isVisible()) return;
+		
 		if(isHover()) {
 			g.setColor(getColorHover());
 		} else {
@@ -43,7 +50,15 @@ public abstract class Button extends InterfaceObject {
 		GraphicsUtil.setAlpha(g, 1);
 	}
 	
-	public abstract void press(int btn);
+	public void press(int btn) {
+		if(al != null) {
+			if(btn - 1 < actionCmd.length) {
+				for(ActionListener a : al) {
+					a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, actionCmd[btn - 1]));
+				}
+			}
+		}
+	}
 	
 	/*
 	 * Getter & Setter	
@@ -78,5 +93,33 @@ public abstract class Button extends InterfaceObject {
 
 	public void setColorNormal(Color cNormal) {
 		this.cNormal = cNormal;
+	}
+	
+	public void addActionListener(ActionListener al) {
+		this.al.add(al);
+	}
+	
+	public void removeActionListener(ActionListener al) {
+		this.al.remove(al);
+	}
+
+	public String getActionCommand(int btn) {
+		if(btn < actionCmd.length) {
+			return actionCmd[btn - 1];
+		}
+		
+		return null;
+	}
+
+	public void setActionCommand(String cmd, int btn) {
+		if(btn < actionCmd.length) {
+			actionCmd[btn - 1] = cmd;
+		}
+	}
+	
+	public void setActionCommand(String cmd) {
+		for(int i = 0; i < actionCmd.length; i++) {
+			actionCmd[i] = cmd;
+		}
 	}
 }

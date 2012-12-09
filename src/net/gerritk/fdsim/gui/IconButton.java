@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-public abstract class IconButton extends Button {
+public class IconButton extends Button {
 	private static final long serialVersionUID = -7479202913149739570L;
 	
 	private BufferedImage img;
@@ -21,9 +21,11 @@ public abstract class IconButton extends Button {
 
 	@Override
 	public void draw(Graphics2D g) {
+		if(!isVisible()) return;
+		
 		super.draw(g);
 		
-		g.drawImage(getImage(), (int) getX(), (int) getY(), null);
+		g.drawImage(getImage(), (int) (getX() + (getWidth() - getImage().getWidth()) / 2), (int) (getY() + (getHeight() - getImage().getHeight()) / 2), null);
 	}
 
 	public BufferedImage getImage() {

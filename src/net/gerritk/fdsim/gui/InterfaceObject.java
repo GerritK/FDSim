@@ -8,6 +8,7 @@ public abstract class InterfaceObject extends Rectangle {
 	private static final long serialVersionUID = -4343835306838898044L;
 	
 	private InterfaceObject ref;
+	private boolean visible = true;
 	
 	public InterfaceObject(int x, int y, int width, int height, InterfaceObject ref) {
 		super(x, y, width, height);
@@ -52,5 +53,13 @@ public abstract class InterfaceObject extends Rectangle {
 		}
 		
 		return super.getY();
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 }

@@ -3,7 +3,6 @@ package net.gerritk.fdsim.gui.objects;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
 
 import net.gerritk.fdsim.Simulation;
 import net.gerritk.fdsim.gui.*;
@@ -14,20 +13,14 @@ public class BottomBar extends Bar {
 	private static final long serialVersionUID = -1344167944540858256L;
 	
 	private IconButton btnPause;
+	private IconButton btnReset;
 	
 	public BottomBar(int x, int height) {
 		super(x, 0, 0, height, null);
 		
 		btnPause = new IconButton(Images.BTN_PAUSE, 125, 1, 14, 14, this) {
-			private static final long serialVersionUID = -6830300456624511872L;
+			private static final long serialVersionUID = -390729799905267457L;
 
-			@Override
-			public void press(int btn) {
-				if(btn == MouseEvent.BUTTON1) {
-					Simulation.setPaused(!Simulation.isPaused());
-				}
-			}
-			
 			@Override
 			public void update() {
 				if(Simulation.isPaused()) {
@@ -37,7 +30,14 @@ public class BottomBar extends Bar {
 				}
 			}
 		};
+		btnPause.setActionCommand("pause");
+		btnPause.addActionListener(Simulation.getButtonHandler());
 		Simulation.buttons.add(btnPause);
+		
+		btnReset = new IconButton(Images.BTN_RESET, 125, 16, 14, 14, this);
+		btnReset.setActionCommand("reset");
+		btnReset.addActionListener(Simulation.getButtonHandler());
+		Simulation.buttons.add(btnReset);
 	}
 
 	@Override
@@ -46,7 +46,9 @@ public class BottomBar extends Bar {
 	}
 
 	@Override
-	public void draw(Graphics2D g) {		
+	public void draw(Graphics2D g) {
+		if(!isVisible()) return;
+		
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight());
 		
@@ -58,8 +60,8 @@ public class BottomBar extends Bar {
 		
 		// CLOCK
 		g.setColor(Color.RED);
-		g.setFont(Simulation.clockFont.getFont(30));
-		g.drawString(TimeUtil.formatMillis(Simulation.simTime), 10, (int) getY() + 25);
+		g.setFont(Simulation.getClockFont().getFont(30));
+		g.drawString(TimeUtil.formatMillis(Simulation.getSimulationTime()), 10, (int) getY() + 25);
 		
 		// MODE
 		g.setColor(Color.WHITE);
@@ -69,15 +71,19 @@ public class BottomBar extends Bar {
 		
 		// GUI
 		btnPause.draw(g);
+		btnReset.draw(g);
 	}
 	
+	/*
+	 * Getter & Setter
+	 */
 	@Override
 	public double getY() {
-		return Simulation.instance.getHeight() - getHeight();
+		return Simulation.getInstance().getHeight() - getHeight();
 	}
 	
 	@Override
 	public double getWidth() {
-		return Simulation.instance.getWidth();
+		return Simulation.getInstance().getWidth();
 	}
 }

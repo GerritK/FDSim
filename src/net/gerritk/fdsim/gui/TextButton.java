@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 
 import net.gerritk.util.StringUtil;
 
-public abstract class TextButton extends Button {
+public class TextButton extends Button {
 	private static final long serialVersionUID = 6212322680296307952L;
 	
 	private String text;
@@ -25,6 +25,8 @@ public abstract class TextButton extends Button {
 
 	@Override
 	public void draw(Graphics2D g) {
+		if(!isVisible()) return;
+		
 		super.draw(g);
 		
 		g.setFont(getFont());		
