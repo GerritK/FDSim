@@ -13,12 +13,12 @@ import net.gerritk.util.TimeUtil;
 public class BottomBar extends Bar {
 	private static final long serialVersionUID = -1344167944540858256L;
 	
-	private ImageButton btnPause;
+	private IconButton btnPause;
 	
 	public BottomBar(int x, int height) {
 		super(x, 0, 0, height, null);
 		
-		btnPause = new ImageButton(Images.BTN_PAUSE, 125, 1, 14, 14, this) {
+		btnPause = new IconButton(Images.BTN_PAUSE, 125, 1, 14, 14, this) {
 			private static final long serialVersionUID = -6830300456624511872L;
 
 			@Override
