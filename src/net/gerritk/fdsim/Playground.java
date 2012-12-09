@@ -20,6 +20,8 @@ public class Playground {
 	private int offsetX, offsetY;
 	private Point start;
 	
+	private Entity selectedEntity;
+	
 	public Playground(String title, Dimension size, Point start) {
 		this.id = lastID++;
 		this.entities = new ArrayList<Entity>();
@@ -125,5 +127,23 @@ public class Playground {
 
 	public void setSize(Dimension size) {
 		this.size = size;
+	}
+	
+	public Entity getSelectedEntity() {
+		return selectedEntity;
+	}
+
+	public void setSelectedEntity(Entity selectedEntity) {
+		this.selectedEntity = selectedEntity;
+	}
+
+	public Entity getEntity(Point p) {
+		for(Entity e : entities) {
+			if(e.containsScreen(p)) {
+				return e;
+			}
+		}
+		
+		return null;
 	}
 }

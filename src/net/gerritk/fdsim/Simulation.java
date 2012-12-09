@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.swing.*;
 
+import net.gerritk.fdsim.entities.Entity;
 import net.gerritk.fdsim.gui.Button;
 import net.gerritk.fdsim.gui.objects.*;
 import net.gerritk.util.*;
@@ -182,8 +183,7 @@ public class Simulation extends JPanel implements Runnable {
 	 * MouseHandler
 	 */
 	public class MouseHandler extends MouseAdapter {
-		public Point mouse;
-		
+		private Point mouse;
 		private Point lastDrag;
 		private boolean mousebutton[] = new boolean[3];
 		
@@ -203,14 +203,20 @@ public class Simulation extends JPanel implements Runnable {
 		
 		@Override
 		public void mouseDragged(MouseEvent e) {
+			Point drag = e.getPoint();
+			
 			if(mousebutton[2] && !isPaused()) {
-				Point drag = e.getPoint();
-				
 				playground.setOffsetX(playground.getOffsetX() + drag.x - lastDrag.x);
 				playground.setOffsetY(playground.getOffsetY() + drag.y - lastDrag.y);
-				
-				lastDrag = drag;
+			} else if(mousebutton[0] && !isPaused()) {
+				Entity se = playground.getSelectedEntity();
+				if(se != null) {
+					se.setX(se.getX() + drag.x - lastDrag.x);
+					se.setY(se.getY() + drag.y - lastDrag.y);
+				}
 			}
+			
+			lastDrag = drag;
 		}
 		
 		@Override
@@ -225,6 +231,10 @@ public class Simulation extends JPanel implements Runnable {
 			
 			if(e.getButton() != MouseEvent.NOBUTTON) {
 				mousebutton[e.getButton() - 1] = true;
+				
+				if(mousebutton[0] && !isPaused()) {
+					playground.setSelectedEntity(playground.getEntity(mouse));
+				}
 			}
 		}
 		
