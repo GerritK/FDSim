@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import net.gerritk.fdsim.entities.Entity;
 
 public class Bluelight extends Light {
-	private long last;
 	private long timerFrequence;
 	private int frequence;
 	private int pause;
@@ -20,12 +19,11 @@ public class Bluelight extends Light {
 		setDelay(delay);
 		
 		timerFrequence = 10 * delay;
-		last = System.currentTimeMillis();
 	}
 	
 	@Override
 	public void update(long delta) {
-		timerFrequence += System.currentTimeMillis() - last;
+		timerFrequence += delta;
 		
 		super.update(delta);
 		
@@ -34,8 +32,6 @@ public class Bluelight extends Light {
 
 			timerFrequence = 0;
 		}
-		
-		last = System.currentTimeMillis();
 	}
 	
 	@Override
