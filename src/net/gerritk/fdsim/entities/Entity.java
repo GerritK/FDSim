@@ -3,6 +3,8 @@ package net.gerritk.fdsim.entities;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Polygon;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import net.gerritk.fdsim.Playground;
@@ -13,6 +15,11 @@ public abstract class Entity {
 	private int x, y;
 	private BufferedImage img;
 	private Playground playground;
+	private double rotation;
+	
+	/*
+	 * TODO Add Method to rotate Object!
+	 */
 	
 	public Entity(String name, int x, int y, BufferedImage img, Playground playground) {
 		setName(name);
@@ -25,6 +32,9 @@ public abstract class Entity {
 	public abstract void update();
 	
 	public void draw(Graphics2D g) {
+		AffineTransform af = g.getTransform();
+        g.rotate(Math.toRadians(- getRotation()), getScreenX() + getImage().getWidth() / 2 + 1, getScreenY() + getImage().getHeight() / 2 + 1);
+		
 		if(isSelected()) {
 			GraphicsUtil.setThickness(g, 3);
 			g.setColor(Color.GREEN);
@@ -32,7 +42,12 @@ public abstract class Entity {
 			GraphicsUtil.setThickness(g, 1);
 		}
 		
-		g.drawImage(getImage(), getScreenX(), getScreenY(), null);
+        g.drawImage(getImage(), getScreenX(), getScreenY(), null);
+        
+        g.setTransform(af);
+        
+        g.setColor(Color.PINK);
+        g.fillPolygon(getCollision());
 	}
 	
 	public boolean containsScreen(Point p) {
@@ -106,7 +121,43 @@ public abstract class Entity {
 		this.playground = playground;
 	}
 	
+	public double getRotation() {
+		return rotation;
+	}
+	
+	public void setRotation(double rotation) {
+		this.rotation = rotation % 360;
+	}
+	
+	public void setSelected(boolean selected) {
+		if(selected) {
+			playground.setSelectedEntity(this);
+		} else if(isSelected()) {
+			playground.setSelectedEntity(null);
+		}
+	}
+	
 	public boolean isSelected() {
 		return playground.getSelectedEntity() == this;
+	}
+	
+	
+	/*
+	 * 
+	 */
+	protected Polygon getCollision() {
+		Polygon poly = new Polygon();
+		
+		double rot = Math.toRadians(getRotation());
+		double alpha = Math.asin((double) getImage().getWidth() / getImage().getHeight()) - 0.1;
+		double hypo = Math.sqrt(Math.pow(getImage().getWidth() / 2, 2) + Math.pow(getImage().getHeight() / 2, 2));
+		
+		poly.addPoint(getX() + getImage().getWidth() / 2 - (int) (Math.sin(rot + alpha) * hypo), getY() + getImage().getHeight() / 2 - (int) (Math.cos(rot + alpha) * hypo));
+		poly.addPoint(getX() + getImage().getWidth() / 2 - (int) (Math.sin(rot - alpha) * hypo), getY() + getImage().getHeight() / 2 - (int) (Math.cos(rot - alpha) * hypo));
+		
+		poly.addPoint(getX() + getImage().getWidth() / 2 + (int) (Math.sin(rot + alpha) * hypo), getY() + getImage().getHeight() / 2 + (int) (Math.cos(rot + alpha) * hypo));
+		poly.addPoint(getX() + getImage().getWidth() / 2 + (int) (Math.sin(rot - alpha) * hypo), getY() + getImage().getHeight() / 2 + (int) (Math.cos(rot - alpha) * hypo));
+		
+		return poly;
 	}
 }

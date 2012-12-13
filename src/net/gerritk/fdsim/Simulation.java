@@ -33,7 +33,9 @@ public class Simulation extends JPanel implements Runnable {
 	private static MouseHandler mouseHandler;
 	private static ButtonHandler buttonHandler;
 	private static FrameHandler frameHandler;
-	private static boolean key_control;
+	
+	private static boolean keyControl;
+	private static boolean keyPlus;
 	
 	// GUI
 	public static ArrayList<Button> buttons = new ArrayList<Button>();
@@ -56,6 +58,7 @@ public class Simulation extends JPanel implements Runnable {
 		renderMap.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		renderMap.put(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 		renderMap.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+		renderMap.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		
 		setPreferredSize(d);
 		addMouseListener(mouseHandler);
@@ -96,6 +99,10 @@ public class Simulation extends JPanel implements Runnable {
 				}
 				
 				simTime += System.currentTimeMillis() - lastRunned;
+				
+				if(keyPlus && playground.getSelectedEntity() != null) {
+					playground.getSelectedEntity().setRotation(playground.getSelectedEntity().getRotation() + 0.5);
+				}
 			}
 			
 			// GUI
@@ -156,7 +163,9 @@ public class Simulation extends JPanel implements Runnable {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode() == KeyEvent.VK_CONTROL) {
-				key_control = true;
+				keyControl = true;
+			} else if(e.getKeyCode() == KeyEvent.VK_PLUS) {
+				keyPlus = true;
 			}
 		}
 
@@ -167,10 +176,12 @@ public class Simulation extends JPanel implements Runnable {
 			} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				frame.dispose();
 			} else if(e.getKeyCode() == KeyEvent.VK_CONTROL) {
-				key_control = false;
+				keyControl = false;
+			} else if(e.getKeyCode() == KeyEvent.VK_PLUS) {
+				keyPlus = false;
 			}
 			
-			if(key_control) {
+			if(keyControl) {
 				if(e.getKeyChar() >= 48 && e.getKeyChar() <= 57) {
 					int mode = e.getKeyChar() - 49;			
 					setMode(mode == -1 ? 9 : mode);
@@ -209,10 +220,15 @@ public class Simulation extends JPanel implements Runnable {
 				playground.setOffsetX(playground.getOffsetX() + drag.x - lastDrag.x);
 				playground.setOffsetY(playground.getOffsetY() + drag.y - lastDrag.y);
 			} else if(mousebutton[0] && !isPaused()) {
-				Entity se = playground.getSelectedEntity();
-				if(se != null) {
-					se.setX(se.getX() + drag.x - lastDrag.x);
-					se.setY(se.getY() + drag.y - lastDrag.y);
+				if(!keyControl) {
+					Entity se = playground.getSelectedEntity();
+					if(se != null) {
+						se.setX(se.getX() + drag.x - lastDrag.x);
+						se.setY(se.getY() + drag.y - lastDrag.y);
+					}
+				} else if(playground.getSelectedEntity() != null) {
+					System.out.println("Rotate...");
+					// TODO Rotate
 				}
 			}
 			
@@ -232,7 +248,7 @@ public class Simulation extends JPanel implements Runnable {
 			if(e.getButton() != MouseEvent.NOBUTTON) {
 				mousebutton[e.getButton() - 1] = true;
 				
-				if(mousebutton[0] && !isPaused()) {
+				if(mousebutton[0] && !isPaused() && !keyControl) {
 					playground.setSelectedEntity(playground.getEntity(mouse));
 				}
 			}

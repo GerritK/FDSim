@@ -33,7 +33,10 @@ public class Playground {
 		goStart();
 		
 		// TEST
-		entities.add(new MTF("test", 100, 100, this));
+		
+		for(int i = 0; i < 5; i++) {
+			entities.add(new MTF("test", 100 + 40 * i, 100, this));
+		}
 	}
 	
 	public void update() {
