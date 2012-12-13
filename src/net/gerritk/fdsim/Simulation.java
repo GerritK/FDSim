@@ -35,7 +35,8 @@ public class Simulation extends JPanel implements Runnable {
 	private static FrameHandler frameHandler;
 	
 	private static boolean keyControl;
-	private static boolean keyPlus;
+	private static boolean keyRotatePlus;
+	private static boolean keyRotateMinus;
 	
 	// GUI
 	public static ArrayList<Button> buttons = new ArrayList<Button>();
@@ -103,9 +104,7 @@ public class Simulation extends JPanel implements Runnable {
 				
 				simTime += System.currentTimeMillis() - lastRunned;
 				
-				if(keyPlus && playground.getSelectedEntity() != null) {
-					playground.getSelectedEntity().setRotation(playground.getSelectedEntity().getRotation() + 0.5);
-				}
+				keyHandler.control();
 			}
 			
 			// GUI
@@ -167,8 +166,10 @@ public class Simulation extends JPanel implements Runnable {
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode() == KeyEvent.VK_CONTROL) {
 				keyControl = true;
-			} else if(e.getKeyCode() == KeyEvent.VK_PLUS) {
-				keyPlus = true;
+			} else if(e.getKeyCode() == KeyEvent.VK_Q) {
+				keyRotatePlus = true;
+			} else if(e.getKeyCode() == KeyEvent.VK_E) {
+				keyRotateMinus = true;
 			}
 		}
 
@@ -180,14 +181,31 @@ public class Simulation extends JPanel implements Runnable {
 				frame.dispose();
 			} else if(e.getKeyCode() == KeyEvent.VK_CONTROL) {
 				keyControl = false;
-			} else if(e.getKeyCode() == KeyEvent.VK_PLUS) {
-				keyPlus = false;
+			} else if(e.getKeyCode() == KeyEvent.VK_Q) {
+				keyRotatePlus = false;
+			} else if(e.getKeyCode() == KeyEvent.VK_E) {
+				keyRotateMinus = false;
 			}
 			
 			if(keyControl) {
 				if(e.getKeyChar() >= 48 && e.getKeyChar() <= 57) {
 					int mode = e.getKeyChar() - 49;			
 					setMode(mode == -1 ? 9 : mode);
+				}
+			}
+		}
+		
+		public void control() {
+			if((keyRotatePlus || keyRotateMinus) && playground.getSelectedEntity() != null) {
+				double r = (keyRotateMinus ? -0.5 : 0.5); 
+				if(keyControl) {
+					r = 45 - playground.getSelectedEntity().getRotation() % 45;
+					
+					playground.getSelectedEntity().setRotation(playground.getSelectedEntity().getRotation() + (keyRotateMinus ? r - 90 : r));
+					keyRotatePlus = false;
+					keyRotateMinus = false;
+				} else {
+					playground.getSelectedEntity().setRotation(playground.getSelectedEntity().getRotation() + r);
 				}
 			}
 		}
