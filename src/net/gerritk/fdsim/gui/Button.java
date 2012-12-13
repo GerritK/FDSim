@@ -28,7 +28,7 @@ public class Button extends InterfaceObject {
 	}
 	
 	@Override
-	public void update() {
+	public void update(long delta) {
 		// Nothing?
 	}
 	

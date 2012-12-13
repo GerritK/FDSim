@@ -82,20 +82,23 @@ public class Simulation extends JPanel implements Runnable {
 	}
 	
 	public static void reset() {
-		System.out.println("I'm now resetted!");
-		// TODO Reset Simulation
+		playground = new Playground(playground.getTitle(), playground.getSize(), playground.getStart());
 	}
 	
 	public void run() {
 		long lastRunned = System.currentTimeMillis();
+		long delta = 0;
 
 		// TODO PLAYGROUND
 		playground = new Playground("Test", new Dimension(1024, 512), new Point(100, 200));
 		
-		while(frame.isVisible()) {			
+		while(frame.isVisible()) {
+			// Calculate Delta
+			delta = System.currentTimeMillis() - lastRunned;
+						
 			if(!isPaused()) {
 				if(playground != null) {
-					playground.update();
+					playground.update(delta);
 				}
 				
 				simTime += System.currentTimeMillis() - lastRunned;
@@ -106,7 +109,7 @@ public class Simulation extends JPanel implements Runnable {
 			}
 			
 			// GUI
-			bottomBar.update();
+			bottomBar.update(delta);
 			
 			repaint();
 			lastRunned = System.currentTimeMillis();

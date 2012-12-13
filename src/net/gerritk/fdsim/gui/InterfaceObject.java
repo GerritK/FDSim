@@ -1,10 +1,11 @@
 package net.gerritk.fdsim.gui;
 
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-public abstract class InterfaceObject extends Rectangle {	
+import net.gerritk.fdsim.interfaces.*;
+
+public abstract class InterfaceObject extends Rectangle implements Drawable, Updateable {	
 	private static final long serialVersionUID = -4343835306838898044L;
 	
 	private InterfaceObject ref;
@@ -14,10 +15,6 @@ public abstract class InterfaceObject extends Rectangle {
 		super(x, y, width, height);
 		setReference(ref);
 	}
-	
-	public abstract void update();
-	
-	public abstract void draw(Graphics2D g);
 	
 	@Override
 	public boolean contains(Point p) {

@@ -22,7 +22,7 @@ public class BottomBar extends Bar {
 			private static final long serialVersionUID = -390729799905267457L;
 
 			@Override
-			public void update() {
+			public void update(long delta) {
 				if(Simulation.isPaused()) {
 					setImage(Images.BTN_PLAY);
 				} else {
@@ -41,8 +41,8 @@ public class BottomBar extends Bar {
 	}
 
 	@Override
-	public void update() {
-		btnPause.update();
+	public void update(long delta) {
+		btnPause.update(delta);
 	}
 
 	@Override

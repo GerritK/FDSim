@@ -5,21 +5,22 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import net.gerritk.fdsim.Playground;
+import net.gerritk.fdsim.interfaces.*;
+import net.gerritk.fdsim.lights.Light;
 import net.gerritk.util.GraphicsUtil;
 
-public abstract class Entity {
+public abstract class Entity implements Drawable, Updateable {
 	private String name;
 	private int x, y;
 	private BufferedImage img;
 	private Playground playground;
 	private double rotation;
-	
-	/*
-	 * TODO Add Method to rotate Object!
-	 */
+	private ArrayList<Light> lights = new ArrayList<Light>();
 	
 	public Entity(String name, int x, int y, BufferedImage img, Playground playground) {
 		setName(name);
@@ -29,30 +30,63 @@ public abstract class Entity {
 		setY(y);
 	}
 	
-	public abstract void update();
+	@Override
+	public void update(long delta) {
+		for(Light l : lights) {
+			l.update(delta);
+		}
+	}
 	
+	@Override
 	public void draw(Graphics2D g) {
 		AffineTransform af = g.getTransform();
         g.rotate(Math.toRadians(- getRotation()), getScreenX() + getImage().getWidth() / 2 + 1, getScreenY() + getImage().getHeight() / 2 + 1);
 		
 		if(isSelected()) {
+			if(collides(null)) {
+				g.setColor(Color.RED);
+			} else {
+				g.setColor(Color.GREEN);
+			}
+			
 			GraphicsUtil.setThickness(g, 3);
-			g.setColor(Color.GREEN);
-			g.drawRoundRect(getScreenX() - 3, getScreenY() - 3, img.getWidth() + 5, img.getHeight() + 5, 3, 3);
+			g.drawRoundRect(getScreenX() - 2, getScreenY() - 2, img.getWidth() + 4, img.getHeight() + 4, 3, 3);
 			GraphicsUtil.setThickness(g, 1);
 		}
 		
         g.drawImage(getImage(), getScreenX(), getScreenY(), null);
         
-        g.setTransform(af);
+        for(Light l : lights) {
+        	l.draw(g);
+        }
         
-        g.setColor(Color.PINK);
-        g.fillPolygon(getCollision());
+        g.setTransform(af);
 	}
 	
 	public boolean containsScreen(Point p) {
-		if(p.x >= getScreenX() && p.x <= getScreenX() + img.getWidth() && p.y >= getScreenY() && p.y <= getScreenY() + img.getHeight()) {
+		Polygon poly = getCollision();
+		poly.translate(getPlayground().getOffsetX(), getPlayground().getOffsetY());
+		
+		if(poly.contains(p)) {
 			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean collides(Entity e) {
+		Area a1 = new Area(this.getCollision());
+		
+		if(e != null) {
+			Area a2 = new Area(e.getCollision());
+			
+			a1.intersect(a2);
+			
+			if(!a1.isEmpty()) {
+				return true;
+			}
+		} else {
+			return getPlayground().checkCollision(this);
 		}
 		
 		return false;
@@ -64,7 +98,7 @@ public abstract class Entity {
 	public String getName() {
 		return name;
 	}
-
+	
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -141,9 +175,15 @@ public abstract class Entity {
 		return playground.getSelectedEntity() == this;
 	}
 	
+	public double getDistance(Entity e) {
+		double xd = getX() - getImage().getWidth() / 2 - e.getX() + e.getImage().getWidth() / 2;
+		double yd = getY() - getImage().getHeight() / 2 - e.getY() + e.getImage().getWidth() / 2;
+		
+		return Math.abs(Math.sqrt(Math.pow(xd, 2) + Math.pow(yd, 2)));
+	}
 	
 	/*
-	 * 
+	 * protected
 	 */
 	protected Polygon getCollision() {
 		Polygon poly = new Polygon();
@@ -159,5 +199,15 @@ public abstract class Entity {
 		poly.addPoint(getX() + getImage().getWidth() / 2 + (int) (Math.sin(rot - alpha) * hypo), getY() + getImage().getHeight() / 2 + (int) (Math.cos(rot - alpha) * hypo));
 		
 		return poly;
+	}
+	
+	protected void addLight(Light light) {
+		lights.add(light);
+	}
+	
+	protected void addLights(Light lights[]) {
+		for(Light l : lights) {
+			this.lights.add(l);
+		}
 	}
 }

@@ -35,13 +35,27 @@ public class Playground {
 		// TEST
 		
 		for(int i = 0; i < 5; i++) {
-			entities.add(new MTF("test", 100 + 40 * i, 100, this));
+			int type = (int) (Math.random() * 2);
+			int x = (int) (Math.random() * size.getWidth());
+			int y = (int) (Math.random() * size.getHeight());
+			double rot = Math.random() * 360;
+			
+			Entity e = null;
+			
+			if(type == 0) {
+				e = new MTF("test", x, y, this);
+			} else if(type == 1) {
+				e = new TSFW("test", x, y, this);
+			}
+			
+			e.setRotation(rot);
+			entities.add(e);
 		}
 	}
 	
-	public void update() {
+	public void update(long delta) {
 		for(Entity e : entities) {
-			e.update();
+			e.update(delta);
 		}
 	}
 	
@@ -50,7 +64,14 @@ public class Playground {
 		g.fillRect(offsetX, offsetY, size.width, size.height);
 		
 		for(Entity e : entities) {
-			e.draw(g);
+			if(e != getSelectedEntity()) {
+				e.draw(g);
+			}
+		}
+		
+		// Selected always on top!
+		if(getSelectedEntity() != null) {
+			getSelectedEntity().draw(g);
 		}
 		
 		g.setColor(Color.GRAY);
@@ -60,6 +81,16 @@ public class Playground {
 	public void goStart() {
 		setOffsetX(getStart().x);
 		setOffsetY(getStart().y);
+	}
+	
+	public boolean checkCollision(Entity e) {
+		for(Entity s : entities) {
+			if(e != s && e.getDistance(s) < 250 && e.collides(s)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	/*
@@ -148,5 +179,17 @@ public class Playground {
 		}
 		
 		return null;
+	}
+	
+	public Entity getNextEntity(Entity e) {
+		Entity tmp = null;
+		
+		for(Entity s : entities) {
+			if(s != e && (tmp == null || e.getDistance(s) < e.getDistance(tmp))) {
+				tmp = s;
+			}
+		}
+		
+		return tmp;
 	}
 }
