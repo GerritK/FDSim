@@ -34,10 +34,6 @@ public class Simulation extends JPanel implements Runnable {
 	private static ButtonHandler buttonHandler;
 	private static FrameHandler frameHandler;
 	
-	private static boolean keyControl;
-	private static boolean keyRotatePlus;
-	private static boolean keyRotateMinus;
-	
 	// GUI
 	public static ArrayList<Button> buttons = new ArrayList<Button>();
 	private static BottomBar bottomBar;
@@ -162,6 +158,10 @@ public class Simulation extends JPanel implements Runnable {
 	 * KeyHandler
 	 */	
 	public class KeyHandler extends KeyAdapter {
+		protected boolean keyControl;
+		protected boolean keyRotatePlus;
+		protected boolean keyRotateMinus;
+		
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode() == KeyEvent.VK_CONTROL) {
@@ -241,7 +241,7 @@ public class Simulation extends JPanel implements Runnable {
 				playground.setOffsetX(playground.getOffsetX() + drag.x - lastDrag.x);
 				playground.setOffsetY(playground.getOffsetY() + drag.y - lastDrag.y);
 			} else if(mousebutton[0] && !isPaused()) {
-				if(!keyControl) {
+				if(!keyHandler.keyControl) {
 					Entity se = playground.getSelectedEntity();
 					if(se != null) {
 						se.setX(se.getX() + drag.x - lastDrag.x);
@@ -269,7 +269,7 @@ public class Simulation extends JPanel implements Runnable {
 			if(e.getButton() != MouseEvent.NOBUTTON) {
 				mousebutton[e.getButton() - 1] = true;
 				
-				if(mousebutton[0] && !isPaused() && !keyControl) {
+				if(mousebutton[0] && !isPaused() && !keyHandler.keyControl) {
 					playground.setSelectedEntity(playground.getEntity(mouse));
 				}
 			}
