@@ -23,6 +23,7 @@ public class Simulation extends JPanel implements Runnable {
 	private static Playground playground;
 	private static OwnFont clockFont;
 	private static long simTime;
+	private static long lastRunned;
 	
 	private static JFrame frame;
 	private static Map<RenderingHints.Key, Object> renderMap;
@@ -82,45 +83,22 @@ public class Simulation extends JPanel implements Runnable {
 		playground = new Playground(playground.getTitle(), playground.getSize(), playground.getStart());
 	}
 	
-	public void run() {
-		long lastRunned = System.currentTimeMillis();
-		long delta = 0;
-
-		// TODO PLAYGROUND
-		playground = new Playground("Test", new Dimension(1024, 512), new Point(100, 200));
-		
-		while(frame.isVisible()) {
-			// Calculate Delta
-			delta = System.currentTimeMillis() - lastRunned;
-						
-			if(!isPaused()) {
-				if(playground != null) {
-					playground.update(delta);
-				}
-				
-				simTime += System.currentTimeMillis() - lastRunned;
-				
-				keyHandler.control();
+	public void update(long delta) {
+		if(!isPaused()) {
+			if(playground != null) {
+				playground.update(delta);
 			}
 			
-			// GUI
-			bottomBar.update(delta);
+			simTime += System.currentTimeMillis() - lastRunned;
 			
-			repaint();
-			lastRunned = System.currentTimeMillis();
-			
-			try {
-				Thread.sleep(1000 / 100);
-			} catch(InterruptedException e) {
-				// Nothing?
-			}
+			keyHandler.control();
 		}
+		
+		// GUI
+		bottomBar.update(delta);
 	}
 	
-	public void paintComponent(Graphics gra) {
-		Graphics2D g = (Graphics2D) gra;
-		g.setRenderingHints(renderMap);
-		
+	public void draw(Graphics2D g) {
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
@@ -152,6 +130,36 @@ public class Simulation extends JPanel implements Runnable {
 		g.setColor(Color.GRAY);
 		g.setFont(new Font("Verdana", Font.PLAIN, 8));
 		g.drawString(COPY, getWidth() - StringUtil.getWidth(COPY, g) - 2, StringUtil.getHeight(COPY, g));
+	}
+	
+	public void run() {
+		lastRunned = System.currentTimeMillis();
+		long delta = 0;
+		
+		// TODO PLAYGROUND
+		playground = new Playground("Test", new Dimension(1024, 512), new Point(100, 200));
+		
+		while(frame.isVisible()) {
+			// Calculate Delta
+			delta = System.currentTimeMillis() - lastRunned;
+			
+			update(delta);
+			
+			repaint();
+			lastRunned = System.currentTimeMillis();
+			
+			try {
+				Thread.sleep(1000 / 100);
+			} catch(InterruptedException e) {
+				// Nothing?
+			}
+		}
+	}
+	
+	public void paintComponent(Graphics gra) {
+		Graphics2D g = (Graphics2D) gra;
+		g.setRenderingHints(renderMap);
+		draw(g);
 	}
 	
 	/*
