@@ -63,6 +63,7 @@ public class Simulation extends JPanel implements Runnable {
 		setPreferredSize(d);
 		addMouseListener(mouseHandler);
 		addMouseMotionListener(mouseHandler);
+		addMouseWheelListener(mouseHandler);
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Point wp = new Point((int) (screenSize.getWidth() - d.getWidth()) / 2, (int) (screenSize.getHeight() - d.getHeight()) / 2);
@@ -193,18 +194,12 @@ public class Simulation extends JPanel implements Runnable {
 	 */	
 	public class KeyHandler extends KeyAdapter {
 		protected boolean keyControl;
-		protected boolean keyRotatePlus;
-		protected boolean keyRotateMinus;
 		protected boolean keyPrint;
 		
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode() == KeyEvent.VK_CONTROL) {
 				keyControl = true;
-			} else if(e.getKeyCode() == KeyEvent.VK_Q) {
-				keyRotatePlus = true;
-			} else if(e.getKeyCode() == KeyEvent.VK_E) {
-				keyRotateMinus = true;
 			} else if(e.getKeyCode() == KeyEvent.VK_F4) {
 				keyPrint = true;
 			}
@@ -218,10 +213,6 @@ public class Simulation extends JPanel implements Runnable {
 				frame.dispose();
 			} else if(e.getKeyCode() == KeyEvent.VK_CONTROL) {
 				keyControl = false;
-			} else if(e.getKeyCode() == KeyEvent.VK_Q) {
-				keyRotatePlus = false;
-			} else if(e.getKeyCode() == KeyEvent.VK_E) {
-				keyRotateMinus = false;
 			} else if(e.getKeyCode() == KeyEvent.VK_F4) {
 				keyPrint = false;
 			}
@@ -235,18 +226,7 @@ public class Simulation extends JPanel implements Runnable {
 		}
 		
 		public void control() {
-			if((keyRotatePlus || keyRotateMinus) && playground.getSelectedEntity() != null) {
-				double r = (keyRotateMinus ? -0.5 : 0.5); 
-				if(keyControl) {
-					r = 45 - playground.getSelectedEntity().getRotation() % 45;
-					
-					playground.getSelectedEntity().setRotation(playground.getSelectedEntity().getRotation() + (keyRotateMinus ? r - 90 : r));
-					keyRotatePlus = false;
-					keyRotateMinus = false;
-				} else {
-					playground.getSelectedEntity().setRotation(playground.getSelectedEntity().getRotation() + r);
-				}
-			}
+			// Nothing at this time
 		}
 	}
 	
@@ -318,6 +298,19 @@ public class Simulation extends JPanel implements Runnable {
 		public void mouseReleased(MouseEvent e) {
 			if(e.getButton() != MouseEvent.NOBUTTON) {
 				mousebutton[e.getButton() - 1] = false;
+			}
+		}
+		
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			if(playground.getSelectedEntity() != null) {
+				Entity se = playground.getSelectedEntity();
+				
+				if(keyHandler.keyControl) {					
+					se.setRotation((int) se.getRotation() + 45 * e.getWheelRotation());
+				} else {
+					se.setRotation((int) se.getRotation() + e.getWheelRotation() * 4);
+				}
 			}
 		}
 	}
