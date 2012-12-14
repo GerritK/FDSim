@@ -2,7 +2,9 @@ package net.gerritk.fdsim;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -146,6 +148,12 @@ public class Simulation extends JPanel implements Runnable {
 			update(delta);
 			
 			repaint();
+			
+			if(keyHandler.keyPrint) {
+				saveScreenshot();
+				keyHandler.keyPrint = false;
+			}
+			
 			lastRunned = System.currentTimeMillis();
 			
 			try {
@@ -163,12 +171,31 @@ public class Simulation extends JPanel implements Runnable {
 	}
 	
 	/*
+	 * Methods
+	 */
+	public void saveScreenshot() {
+		BufferedImage shot = new BufferedImage(getWidth(), getHeight(), BufferedImage.TRANSLUCENT);
+		Graphics2D g = shot.createGraphics();
+		
+		g.setRenderingHints(renderMap);
+		draw(g);
+		g.dispose();
+		
+		Calendar cal = Calendar.getInstance();
+		String name = "shot_" + cal.get(Calendar.YEAR) + "-" + cal.get(Calendar.MONTH) + " - " + cal.get(Calendar.DAY_OF_MONTH) + "_" +
+				cal.get(Calendar.HOUR_OF_DAY) + "-" + cal.get(Calendar.MINUTE) + "-" + cal.get(Calendar.SECOND);
+		
+		ImageUtil.saveImage("screenshots/", name, shot);		
+	}
+	
+	/*
 	 * KeyHandler
 	 */	
 	public class KeyHandler extends KeyAdapter {
 		protected boolean keyControl;
 		protected boolean keyRotatePlus;
 		protected boolean keyRotateMinus;
+		protected boolean keyPrint;
 		
 		@Override
 		public void keyPressed(KeyEvent e) {
@@ -178,6 +205,8 @@ public class Simulation extends JPanel implements Runnable {
 				keyRotatePlus = true;
 			} else if(e.getKeyCode() == KeyEvent.VK_E) {
 				keyRotateMinus = true;
+			} else if(e.getKeyCode() == KeyEvent.VK_F4) {
+				keyPrint = true;
 			}
 		}
 
@@ -193,6 +222,8 @@ public class Simulation extends JPanel implements Runnable {
 				keyRotatePlus = false;
 			} else if(e.getKeyCode() == KeyEvent.VK_E) {
 				keyRotateMinus = false;
+			} else if(e.getKeyCode() == KeyEvent.VK_F4) {
+				keyPrint = false;
 			}
 			
 			if(keyControl) {
