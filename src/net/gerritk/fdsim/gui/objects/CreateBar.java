@@ -18,6 +18,7 @@ public class CreateBar extends Bar {
 		
 		btnToggle = new Button(width - 8, 20, 8, (int) (getHeight() - getY()) - 40, Color.BLACK, Color.DARK_GRAY, Color.GRAY, SimColor.FIRE_RED, this);
 		btnToggle.setActionCommand("createBar");
+		btnToggle.setToolTip("Menü ein-/ausblenden");
 		btnToggle.addActionListener(Simulation.getButtonHandler());
 		Simulation.buttons.add(btnToggle);
 		

@@ -11,9 +11,12 @@ import net.gerritk.fdsim.Simulation;
 public class Button extends InterfaceObject {
 	private static final long serialVersionUID = -2273998620740218304L;
 	
+	public static final int DEFAULT = 0, ROUND_RECT = 1;
+	
 	private ToolTip tip;
 	private boolean hover;
 	private Color cText, cNormal, cHover, cBorder;
+	private int style;
 	private String actionCmd[] = new String[3];
 	private ArrayList<ActionListener> al = new ArrayList<ActionListener>();
 	
@@ -44,10 +47,20 @@ public class Button extends InterfaceObject {
 			g.setColor(getColorNormal());		
 		}
 		
-		g.fillRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight());
-		
-		g.setColor(getColorBorder());
-		g.drawRect((int) getX(), (int) getY(), (int) getWidth() - 1, (int) getHeight() - 1);
+		switch(style) {
+			default:
+			case DEFAULT:
+				g.fillRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight());
+				g.setColor(getColorBorder());
+				g.drawRect((int) getX(), (int) getY(), (int) getWidth() - 1, (int) getHeight() - 1);
+				break;
+			
+			case ROUND_RECT:
+				g.fillRoundRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight(), 8, 8);
+				g.setColor(getColorBorder());
+				g.drawRoundRect((int) getX(), (int) getY(), (int) getWidth() - 1, (int) getHeight() - 1, 8, 8);
+				break;
+		}
 		
 		if(hover && tip != null && System.currentTimeMillis() - Simulation.getMouseHandler().lastMoved > 1000) {
 			tip.draw(g);
@@ -145,5 +158,13 @@ public class Button extends InterfaceObject {
 		} else {
 			this.tip = new ToolTip((int) getWidth() - 4, (int) - 16, tip, this);
 		}
+	}
+
+	public int getStyle() {
+		return style;
+	}
+
+	public void setStyle(int style) {
+		this.style = style;
 	}
 }

@@ -34,6 +34,10 @@ public class Playground {
 		goStart();
 		
 		// TEST
+		int base = 1;
+		int t = 1;
+		int m = 1;
+		int s = 3;
 		
 		for(int i = 0; i < 10; i++) {
 			int type = (int) (Math.random() * 2);
@@ -41,12 +45,22 @@ public class Playground {
 			int y = (int) (Math.random() * size.getHeight());
 			int rot = (int) (Math.random() * 72);
 			
+			if(t == 1 && m == 1) {
+				s = (int) (Math.random() * 5) + 1;
+			}
+			
 			Entity e = null;
 			
 			if(type == 0) {
-				e = new MTF("test", x, y, this);
+				e = new MTF(base + "-17-" + m++, x, y, this);
 			} else if(type == 1) {
-				e = new TSFW("test", x, y, this);
+				e = new TSFW(base + "-41-" + t++, x, y, this);
+			}
+			
+			if(m + t - 2 == s) {
+				m = 1;
+				t = 1;
+				base++;
 			}
 			
 			e.setRotation(rot * 5);

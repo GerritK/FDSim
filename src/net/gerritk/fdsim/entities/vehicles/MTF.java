@@ -9,7 +9,7 @@ public class MTF extends Vehicle {
 	public Bluelight bluelight[];
 	
 	public MTF(String name, int x, int y,Playground playground) {
-		super("MTF_" + name, x, y, SimImage.VEH_MTF, playground);
+		super(name, x, y, SimImage.VEH_MTF, playground);
 		
 		bluelight = new Bluelight[3];
 		

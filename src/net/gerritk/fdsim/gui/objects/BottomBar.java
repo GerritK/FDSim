@@ -34,12 +34,14 @@ public class BottomBar extends Bar {
 		btnPause.setActionCommand("pause");
 		btnPause.setToolTip("Simulation pausieren");
 		btnPause.addActionListener(Simulation.getButtonHandler());
+		btnPause.setStyle(Button.ROUND_RECT);
 		Simulation.buttons.add(btnPause);
 		
 		btnReset = new IconButton(SimImage.BTN_RESET, 153, 2, 26, 26, this);
 		btnReset.setActionCommand("reset");
 		btnReset.setToolTip("Szenario zurücksetzen");
 		btnReset.addActionListener(Simulation.getButtonHandler());
+		btnReset.setStyle(Button.ROUND_RECT);
 		Simulation.buttons.add(btnReset);
 	}
 
