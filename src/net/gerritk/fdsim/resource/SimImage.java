@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 import net.gerritk.util.ImageUtil;
 
-public abstract class Images {
+public abstract class SimImage {
 	/*
 	 * GUI Images
 	 */

@@ -7,26 +7,26 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import net.gerritk.fdsim.Simulation;
-import net.gerritk.util.GraphicsUtil;
 
 public class Button extends InterfaceObject {
 	private static final long serialVersionUID = -2273998620740218304L;
 	
 	private ToolTip tip;
 	private boolean hover;
-	private Color cText, cNormal, cHover;
+	private Color cText, cNormal, cHover, cBorder;
 	private String actionCmd[] = new String[3];
 	private ArrayList<ActionListener> al = new ArrayList<ActionListener>();
 	
-	public Button(int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, InterfaceObject ref) {
+	public Button(int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, Color cBorder, InterfaceObject ref) {
 		super(x, y, width, height, ref);
 		setColorText(cText);
 		setColorNormal(cNormal);
 		setColorHover(cHover);
+		setColorBorder(cBorder);
 	}
 	
 	public Button(int x, int y, int width, int height, InterfaceObject ref) {
-		this(x, y, width, height, Color.BLACK, Color.GRAY, Color.LIGHT_GRAY, ref);
+		this(x, y, width, height, Color.BLACK, Color.GRAY, Color.LIGHT_GRAY, Color.DARK_GRAY, ref);
 	}
 	
 	@Override
@@ -46,10 +46,8 @@ public class Button extends InterfaceObject {
 		
 		g.fillRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight());
 		
-		g.setColor(Color.BLACK);
-		GraphicsUtil.setAlpha(g, 0.7f);
+		g.setColor(getColorBorder());
 		g.drawRect((int) getX(), (int) getY(), (int) getWidth() - 1, (int) getHeight() - 1);
-		GraphicsUtil.setAlpha(g, 1);
 		
 		if(hover && tip != null && System.currentTimeMillis() - Simulation.getMouseHandler().lastMoved > 1000) {
 			tip.draw(g);
@@ -99,6 +97,14 @@ public class Button extends InterfaceObject {
 
 	public void setColorNormal(Color cNormal) {
 		this.cNormal = cNormal;
+	}
+	
+	public Color getColorBorder() {
+		return cBorder;
+	}
+
+	public void setColorBorder(Color cBorder) {
+		this.cBorder = cBorder;
 	}
 	
 	public void addActionListener(ActionListener al) {

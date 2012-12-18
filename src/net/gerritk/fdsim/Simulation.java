@@ -14,6 +14,7 @@ import net.gerritk.fdsim.entities.Entity;
 import net.gerritk.fdsim.gui.Button;
 import net.gerritk.fdsim.gui.PopupMenu;
 import net.gerritk.fdsim.gui.objects.*;
+import net.gerritk.fdsim.resource.SimColor;
 import net.gerritk.util.*;
 
 public class Simulation extends JPanel implements Runnable {
@@ -41,6 +42,7 @@ public class Simulation extends JPanel implements Runnable {
 	// GUI
 	public static ArrayList<Button> buttons = new ArrayList<Button>();
 	private static BottomBar bottomBar;
+	private static CreateBar createBar;
 	private static PopupMenu popupMenu;
 	
 	public Simulation(Dimension d, int mode) {
@@ -72,6 +74,7 @@ public class Simulation extends JPanel implements Runnable {
 		
 		// GUI
 		bottomBar = new BottomBar(0, 30);
+		createBar = new CreateBar(0, 80);
 		
 		frame = new JFrame("Feuerwehr Planspiel Simulation " + VERSION);
 		frame.addKeyListener(keyHandler);
@@ -101,10 +104,11 @@ public class Simulation extends JPanel implements Runnable {
 		
 		// GUI
 		bottomBar.update(delta);
+		createBar.update(delta);
 	}
 	
 	public void draw(Graphics2D g) {
-		g.setColor(Color.DARK_GRAY);
+		g.setColor(SimColor.VOID);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
 		// PLAYGROUND
@@ -118,6 +122,7 @@ public class Simulation extends JPanel implements Runnable {
 		}
 		
 		bottomBar.draw(g);
+		createBar.draw(g);
 		
 		if(isPaused()) {
 			String paused = "Pausiert";
@@ -127,7 +132,7 @@ public class Simulation extends JPanel implements Runnable {
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, getWidth(), getHeight());
 			GraphicsUtil.setAlpha(g, 1);
-			g.setColor(Color.RED);
+			g.setColor(SimColor.FIRE_RED);
 			g.setFont(new Font("Verdana", Font.BOLD, 24));
 			g.drawString(paused, (getWidth() - StringUtil.getWidth(paused, g)) / 2, (getHeight() - StringUtil.getHeight(paused, g)) / 2);
 			g.setColor(Color.WHITE);
@@ -255,8 +260,10 @@ public class Simulation extends JPanel implements Runnable {
 			for(Button b : buttons) {
 	        	if(b.contains(mouse)) {
 	        		b.setHover(true);
+	        		frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
 	        	} else if(b.isHover()) {
 	        		b.setHover(false);
+	        		frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	        	}
 			}
 		}
@@ -310,7 +317,8 @@ public class Simulation extends JPanel implements Runnable {
 			}
 			
 			if(e.getButton() == MouseEvent.BUTTON3 && playground.getSelectedEntity() != null) {
-				popupMenu = new PopupMenu(e.getX(), e.getY(), 100, 64, null); // TODO
+				popupMenu = new PopupMenu(e.getX() + 5, e.getY(), 100, 64, null); // TODO
+				popupMenu.setTitle(playground.getSelectedEntity().getName());
 			}
 		}
 		
@@ -338,8 +346,10 @@ public class Simulation extends JPanel implements Runnable {
 			
 			if(cmd.equals("pause")) {
 				setPaused(!isPaused());
-			} else if (cmd.equals("reset")) {
+			} else if(cmd.equals("reset")) {
 				reset();
+			} else if(cmd.equals("createBar")) {
+				createBar.setExtended(!createBar.isExtended());
 			}
 		}
 	}
@@ -350,7 +360,9 @@ public class Simulation extends JPanel implements Runnable {
 	public class FrameHandler extends ComponentAdapter {
 		@Override
 		public void componentResized(ComponentEvent e) {
-			playground.updateOffset();
+			if(playground != null) {
+				playground.updateOffset();
+			}
 		}
 	}
 	

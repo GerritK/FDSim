@@ -9,8 +9,8 @@ public class IconButton extends Button {
 	
 	private BufferedImage img;
 	
-	public IconButton(BufferedImage img, int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, InterfaceObject ref) {
-		super(x, y, width, height, cText, cNormal, cHover, ref);
+	public IconButton(BufferedImage img, int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, Color cBorder, InterfaceObject ref) {
+		super(x, y, width, height, cText, cNormal, cHover, cBorder, ref);
 		setImage(img);
 	}
 	

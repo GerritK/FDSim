@@ -12,8 +12,8 @@ public class TextButton extends Button {
 	private String text;
 	private Font font = new Font("Verdana", Font.PLAIN, 12);
 	
-	public TextButton(String text, int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, Font font, InterfaceObject ref) {
-		super(x, y, width, height, cText, cNormal, cHover, ref);
+	public TextButton(String text, int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, Color cBorder, Font font, InterfaceObject ref) {
+		super(x, y, width, height, cText, cNormal, cHover, cBorder, ref);
 		setText(text);
 		setFont(font);
 	}	

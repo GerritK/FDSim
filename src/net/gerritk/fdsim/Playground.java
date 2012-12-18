@@ -35,7 +35,7 @@ public class Playground {
 		
 		// TEST
 		
-		for(int i = 0; i < 5; i++) {
+		for(int i = 0; i < 10; i++) {
 			int type = (int) (Math.random() * 2);
 			int x = (int) (Math.random() * size.getWidth());
 			int y = (int) (Math.random() * size.getHeight());

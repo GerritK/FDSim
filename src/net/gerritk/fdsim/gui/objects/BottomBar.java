@@ -6,7 +6,8 @@ import java.awt.Graphics2D;
 
 import net.gerritk.fdsim.Simulation;
 import net.gerritk.fdsim.gui.*;
-import net.gerritk.fdsim.resource.Images;
+import net.gerritk.fdsim.resource.SimColor;
+import net.gerritk.fdsim.resource.SimImage;
 import net.gerritk.util.TimeUtil;
 
 public class BottomBar extends Bar {
@@ -18,15 +19,15 @@ public class BottomBar extends Bar {
 	public BottomBar(int x, int height) {
 		super(x, 0, 0, height, null);
 		
-		btnPause = new IconButton(Images.BTN_PAUSE, 126, 2, 26, 26, this) {
+		btnPause = new IconButton(SimImage.BTN_PAUSE, 126, 2, 26, 26, this) {
 			private static final long serialVersionUID = -390729799905267457L;
 
 			@Override
 			public void update(long delta) {
 				if(Simulation.isPaused()) {
-					setImage(Images.BTN_PLAY);
+					setImage(SimImage.BTN_PLAY);
 				} else {
-					setImage(Images.BTN_PAUSE);
+					setImage(SimImage.BTN_PAUSE);
 				}
 			}
 		};
@@ -35,7 +36,7 @@ public class BottomBar extends Bar {
 		btnPause.addActionListener(Simulation.getButtonHandler());
 		Simulation.buttons.add(btnPause);
 		
-		btnReset = new IconButton(Images.BTN_RESET, 153, 2, 26, 26, this);
+		btnReset = new IconButton(SimImage.BTN_RESET, 153, 2, 26, 26, this);
 		btnReset.setActionCommand("reset");
 		btnReset.setToolTip("Szenario zurücksetzen");
 		btnReset.addActionListener(Simulation.getButtonHandler());
@@ -55,14 +56,14 @@ public class BottomBar extends Bar {
 		g.fillRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight());
 		
 		// LINES
-		g.setColor(Color.RED);
+		g.setColor(SimColor.FIRE_RED);
 		g.drawLine((int) getX(), (int) getY(), (int) getWidth(), (int) getY());
 		g.drawLine((int) getX() + 124, (int) getY(), (int) getX() + 124, (int) (getY() + getHeight()));
 		g.drawLine((int) (getX() + getWidth()) - 124, (int) getY(), (int) (getX() + getWidth()) - 124, (int) (getY() + getHeight()));
 		g.drawLine((int) getX(), (int) (getY() + getHeight()) - 1, (int) getWidth(), (int) (getY() + getHeight()) - 1);
 		
 		// CLOCK
-		g.setColor(Color.RED);
+		g.setColor(SimColor.FIRE_RED);
 		g.setFont(Simulation.getClockFont().getFont(30));
 		g.drawString(TimeUtil.formatMillis(Simulation.getSimulationTime()), 10, (int) getY() + 25);
 		
