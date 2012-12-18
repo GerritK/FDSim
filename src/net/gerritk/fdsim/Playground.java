@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import net.gerritk.fdsim.entities.*;
 import net.gerritk.fdsim.entities.vehicles.*;
+import net.gerritk.util.StringUtil;
 
 public class Playground {
 	private static int lastID;
@@ -38,7 +39,7 @@ public class Playground {
 			int type = (int) (Math.random() * 2);
 			int x = (int) (Math.random() * size.getWidth());
 			int y = (int) (Math.random() * size.getHeight());
-			double rot = Math.random() * 360;
+			int rot = (int) (Math.random() * 72);
 			
 			Entity e = null;
 			
@@ -48,7 +49,7 @@ public class Playground {
 				e = new TSFW("test", x, y, this);
 			}
 			
-			e.setRotation(rot);
+			e.setRotation(rot * 5);
 			entities.add(e);
 		}
 	}
@@ -60,6 +61,13 @@ public class Playground {
 	}
 	
 	public void draw(Graphics2D g) {
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRoundRect(offsetX, offsetY - 15, StringUtil.getWidth(getTitle(), g) + 10, 20, 8, 8);
+		g.setColor(Color.DARK_GRAY);
+		g.drawRoundRect(offsetX - 1, offsetY - 15, StringUtil.getWidth(getTitle(), g) + 11, 21, 8, 8);
+		g.setColor(Color.BLACK);
+		g.drawString(getTitle(), offsetX + 5, offsetY - 2);
+		
 		g.setColor(Color.WHITE);
 		g.fillRect(offsetX, offsetY, size.width, size.height);
 		

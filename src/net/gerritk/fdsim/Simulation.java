@@ -19,7 +19,7 @@ public class Simulation extends JPanel implements Runnable {
 	private static final long serialVersionUID = 3904671781449439735L;
 	
 	public static final String VERSION = "0.0.1 DEV", COPY = "(c) 2012 - K.Design - Gerrit Kaul - Feuerwehr Braunschweig";
-	public static final int MODE_EXPERT = 0, MODE_SIMPLE = 1;
+	public static final int MODE_HOST = 0, MODE_USER = 1;
 	
 	private static Simulation instance;
 	private static Playground playground;
@@ -140,7 +140,7 @@ public class Simulation extends JPanel implements Runnable {
 		long delta = 0;
 		
 		// TODO PLAYGROUND
-		playground = new Playground("Test", new Dimension(1024, 512), new Point(100, 200));
+		playground = new Playground("Verkehrsunfall B2", new Dimension(1024, 512), new Point(100, 200));
 		
 		while(frame.isVisible()) {
 			// Calculate Delta
@@ -365,7 +365,7 @@ public class Simulation extends JPanel implements Runnable {
 	}
 	
 	public static void setMode(int mode) {
-		if(mode >= MODE_EXPERT && mode <= MODE_SIMPLE) {
+		if(mode >= MODE_HOST && mode <= MODE_USER) {
 			Simulation.mode = mode;
 			// TODO Repaint & Update?
 		}
@@ -395,7 +395,7 @@ public class Simulation extends JPanel implements Runnable {
 	 * MAIN-METHOD
 	 */
 	public static void main(String args[]) {		
-		int mode = MODE_EXPERT;
+		int mode = MODE_HOST;
 		int width = 640;
 		int height = 480;
 		
@@ -403,10 +403,10 @@ public class Simulation extends JPanel implements Runnable {
 			String value = arg.substring(2);
 			
 			if(arg.startsWith("m:")) {
-				if(value.equalsIgnoreCase("expert") || (NumberUtil.isNumber(value) && value.equalsIgnoreCase(MODE_EXPERT + ""))) {
-					mode = MODE_EXPERT;
-				} else if(value.equalsIgnoreCase("simple") || (NumberUtil.isNumber(value) && value.equalsIgnoreCase(MODE_SIMPLE + ""))) {
-					mode = MODE_SIMPLE;
+				if(value.equalsIgnoreCase("host") || (NumberUtil.isNumber(value) && value.equalsIgnoreCase(MODE_HOST + ""))) {
+					mode = MODE_HOST;
+				} else if(value.equalsIgnoreCase("user") || (NumberUtil.isNumber(value) && value.equalsIgnoreCase(MODE_USER + ""))) {
+					mode = MODE_USER;
 				}
 			} else if(arg.startsWith("w:") || arg.startsWith("h:")) {
 				int size;

@@ -66,7 +66,7 @@ public class BottomBar extends Bar {
 		// MODE
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Verdana", Font.PLAIN, 12));
-		String m = "Modus: " + (Simulation.getMode() == Simulation.MODE_EXPERT ? "Experte" : "Einsteiger");
+		String m = "Modus: " + (Simulation.getMode() == Simulation.MODE_HOST ? "Host" : "Benutzer");
 		g.drawString(m, (int) (getX() + getWidth()) - 120, (int) (getY() + getHeight()) - 2);
 		
 		// GUI
