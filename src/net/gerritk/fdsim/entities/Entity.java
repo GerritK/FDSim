@@ -13,8 +13,11 @@ import net.gerritk.fdsim.Playground;
 import net.gerritk.fdsim.interfaces.*;
 import net.gerritk.fdsim.lights.Light;
 import net.gerritk.util.GraphicsUtil;
+import net.gerritk.util.MathUtil;
 
 public abstract class Entity implements Drawable, Updateable {
+	protected static final int BORDER = 2;
+	
 	private String name;
 	private int x, y;
 	private BufferedImage img;
@@ -50,7 +53,7 @@ public abstract class Entity implements Drawable, Updateable {
 			}
 			
 			GraphicsUtil.setThickness(g, 3);
-			g.drawRoundRect(getScreenX() - 2, getScreenY() - 2, img.getWidth() + 4, img.getHeight() + 4, 3, 3);
+			g.drawRoundRect(getScreenX() - BORDER, getScreenY() - BORDER, img.getWidth() + BORDER * 2, img.getHeight() + BORDER * 2, 3, 3);
 			GraphicsUtil.setThickness(g, 1);
 		}
 		
@@ -112,10 +115,12 @@ public abstract class Entity implements Drawable, Updateable {
 	}
 	
 	public void setX(int x) {
-		if(x < 0) {
-			this.x = 0;
-		} else if(x > playground.getSize().width - img.getWidth()) {
-			this.x = playground.getSize().width - img.getWidth();
+		int tmp = 0;
+		
+		if(x < (tmp = 0 - MathUtil.getHeighestPoint(getCollision(), MathUtil.LEFT).x + this.x + BORDER)) {
+			this.x = tmp;
+		} else if(x > (tmp = playground.getSize().width - MathUtil.getHeighestPoint(getCollision(), MathUtil.RIGHT).x + this.x - BORDER)) {
+			this.x = tmp;
 		} else {
 			this.x = x;
 		}
@@ -130,10 +135,12 @@ public abstract class Entity implements Drawable, Updateable {
 	}
 	
 	public void setY(int y) {
-		if(y < 0) {
-			this.y = 0;
-		} else if(y > playground.getSize().height - img.getHeight()) {
-			this.y = playground.getSize().height - img.getHeight();
+		int tmp = 0;
+		
+		if(y < (tmp = 0 - MathUtil.getHeighestPoint(getCollision(), MathUtil.TOP).y + this.y + BORDER)) {
+			this.y = tmp;
+		} else if(y > (tmp = playground.getSize().height - MathUtil.getHeighestPoint(getCollision(), MathUtil.BOTTOM).y + this.y - BORDER)) {
+			this.y = tmp;
 		} else {
 			this.y = y;
 		}
@@ -161,6 +168,8 @@ public abstract class Entity implements Drawable, Updateable {
 	
 	public void setRotation(double rotation) {
 		this.rotation = rotation % 360;
+		setY(getY());
+		setX(getX());
 	}
 	
 	public void setSelected(boolean selected) {
