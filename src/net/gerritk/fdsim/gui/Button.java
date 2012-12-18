@@ -51,7 +51,7 @@ public class Button extends InterfaceObject {
 		g.drawRect((int) getX(), (int) getY(), (int) getWidth() - 1, (int) getHeight() - 1);
 		GraphicsUtil.setAlpha(g, 1);
 		
-		if(hover && tip != null && Simulation.getMouseHandler().lastMoved > 5000) {
+		if(hover && tip != null && System.currentTimeMillis() - Simulation.getMouseHandler().lastMoved > 1000) {
 			tip.draw(g);
 		}
 	}
@@ -137,7 +137,7 @@ public class Button extends InterfaceObject {
 		if(tip == null) {
 			this.tip = null;
 		} else {
-			this.tip = new ToolTip((int) getWidth() + 2, (int) - getHeight() - 2, tip, this);
+			this.tip = new ToolTip((int) getWidth() - 4, (int) - 16, tip, this);
 		}
 	}
 }

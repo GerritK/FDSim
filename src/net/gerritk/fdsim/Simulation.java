@@ -146,7 +146,7 @@ public class Simulation extends JPanel implements Runnable {
 		long delta = 0;
 		
 		// TODO PLAYGROUND
-		playground = new Playground("Verkehrsunfall B2", new Dimension(512, 512), new Point(100, 200));
+		playground = new Playground("Wohnhausbrand Siekgraben", new Dimension(800, 800), new Point(100, 200));
 		
 		while(frame.isVisible()) {
 			// Calculate Delta
@@ -296,6 +296,8 @@ public class Simulation extends JPanel implements Runnable {
 				
 				if(mousebutton[0] && !isPaused() && !keyHandler.keyControl) {
 					playground.setSelectedEntity(playground.getEntity(mouse));
+				} else if(mousebutton[2] && !isPaused() && (playground.getEntity(mouse) == null || playground.getEntity(mouse) != playground.getSelectedEntity())) {
+					playground.setSelectedEntity(null);
 				}
 			}
 		}
@@ -308,7 +310,7 @@ public class Simulation extends JPanel implements Runnable {
 			}
 			
 			if(e.getButton() == MouseEvent.BUTTON3 && playground.getSelectedEntity() != null) {
-				popupMenu = new PopupMenu(e.getX(), e.getY(), 100, 200, null); // TODO
+				popupMenu = new PopupMenu(e.getX(), e.getY(), 100, 64, null); // TODO
 			}
 		}
 		
@@ -378,7 +380,6 @@ public class Simulation extends JPanel implements Runnable {
 	public static void setMode(int mode) {
 		if(mode >= MODE_HOST && mode <= MODE_USER) {
 			Simulation.mode = mode;
-			// TODO Repaint & Update?
 		}
 	}
 	

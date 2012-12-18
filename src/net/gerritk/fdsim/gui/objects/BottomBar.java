@@ -18,7 +18,7 @@ public class BottomBar extends Bar {
 	public BottomBar(int x, int height) {
 		super(x, 0, 0, height, null);
 		
-		btnPause = new IconButton(Images.BTN_PAUSE, 125, 1, 14, 14, this) {
+		btnPause = new IconButton(Images.BTN_PAUSE, 126, 2, 26, 26, this) {
 			private static final long serialVersionUID = -390729799905267457L;
 
 			@Override
@@ -35,8 +35,9 @@ public class BottomBar extends Bar {
 		btnPause.addActionListener(Simulation.getButtonHandler());
 		Simulation.buttons.add(btnPause);
 		
-		btnReset = new IconButton(Images.BTN_RESET, 125, 16, 14, 14, this);
+		btnReset = new IconButton(Images.BTN_RESET, 153, 2, 26, 26, this);
 		btnReset.setActionCommand("reset");
+		btnReset.setToolTip("Szenario zurücksetzen");
 		btnReset.addActionListener(Simulation.getButtonHandler());
 		Simulation.buttons.add(btnReset);
 	}
@@ -58,6 +59,7 @@ public class BottomBar extends Bar {
 		g.drawLine((int) getX(), (int) getY(), (int) getWidth(), (int) getY());
 		g.drawLine((int) getX() + 124, (int) getY(), (int) getX() + 124, (int) (getY() + getHeight()));
 		g.drawLine((int) (getX() + getWidth()) - 124, (int) getY(), (int) (getX() + getWidth()) - 124, (int) (getY() + getHeight()));
+		g.drawLine((int) getX(), (int) (getY() + getHeight()) - 1, (int) getWidth(), (int) (getY() + getHeight()) - 1);
 		
 		// CLOCK
 		g.setColor(Color.RED);
@@ -68,7 +70,7 @@ public class BottomBar extends Bar {
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Verdana", Font.PLAIN, 12));
 		String m = "Modus: " + (Simulation.getMode() == Simulation.MODE_HOST ? "Host" : "Benutzer");
-		g.drawString(m, (int) (getX() + getWidth()) - 120, (int) (getY() + getHeight()) - 2);
+		g.drawString(m, (int) (getX() + getWidth()) - 120, (int) (getY() + getHeight()) - 3);
 		
 		// GUI
 		btnPause.draw(g);

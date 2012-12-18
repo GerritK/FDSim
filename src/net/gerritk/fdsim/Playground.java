@@ -62,11 +62,11 @@ public class Playground {
 	
 	public void draw(Graphics2D g) {
 		g.setColor(Color.LIGHT_GRAY);
-		g.fillRoundRect(offsetX, offsetY - 15, StringUtil.getWidth(getTitle(), g) + 10, 20, 8, 8);
-		g.setColor(Color.DARK_GRAY);
-		g.drawRoundRect(offsetX - 1, offsetY - 15, StringUtil.getWidth(getTitle(), g) + 11, 21, 8, 8);
+		g.fillRoundRect(offsetX + 1, offsetY - 15, StringUtil.getWidth(getTitle(), g) + 11, 20, 8, 8);
+		g.setColor(Color.GRAY);
+		g.drawRoundRect(offsetX, offsetY - 15, StringUtil.getWidth(getTitle(), g) + 12, 21, 8, 8);
 		g.setColor(Color.BLACK);
-		g.drawString(getTitle(), offsetX + 5, offsetY - 2);
+		g.drawString(getTitle(), offsetX + 7, offsetY - 2);
 		
 		g.setColor(Color.WHITE);
 		g.fillRect(offsetX, offsetY, size.width, size.height);

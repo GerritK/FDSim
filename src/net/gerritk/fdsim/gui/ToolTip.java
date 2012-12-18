@@ -19,14 +19,14 @@ public class ToolTip extends InterfaceObject {
 	@Override
 	public void draw(Graphics2D g) {
 		setWidth(StringUtil.getWidth(getTip(), g));
-		setHeight(StringUtil.getWidth(getTip(), g));
+		setHeight(StringUtil.getHeight(getTip(), g));
 		
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect((int) getX(), (int) getY(), (int) getWidth() + 4, (int) getHeight());
 		g.setColor(Color.BLACK);
 		g.drawString(getTip(), (int) getX() + 2, (int) (getY() + getHeight()) - 2);
 		g.setColor(Color.GRAY);
-		g.drawRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight());
+		g.drawRect((int) getX(), (int) getY(), (int) getWidth() + 3, (int) getHeight());
 	}
 	
 	@Override
