@@ -31,6 +31,7 @@ public class BottomBar extends Bar {
 			}
 		};
 		btnPause.setActionCommand("pause");
+		btnPause.setToolTip("Simulation pausieren");
 		btnPause.addActionListener(Simulation.getButtonHandler());
 		Simulation.buttons.add(btnPause);
 		

@@ -12,6 +12,7 @@ import javax.swing.*;
 
 import net.gerritk.fdsim.entities.Entity;
 import net.gerritk.fdsim.gui.Button;
+import net.gerritk.fdsim.gui.PopupMenu;
 import net.gerritk.fdsim.gui.objects.*;
 import net.gerritk.util.*;
 
@@ -40,6 +41,7 @@ public class Simulation extends JPanel implements Runnable {
 	// GUI
 	public static ArrayList<Button> buttons = new ArrayList<Button>();
 	private static BottomBar bottomBar;
+	private static PopupMenu popupMenu;
 	
 	public Simulation(Dimension d, int mode) {
 		setMode(mode);
@@ -111,6 +113,10 @@ public class Simulation extends JPanel implements Runnable {
 		}
 		
 		// GUI
+		if(popupMenu != null) {
+			popupMenu.draw(g);
+		}
+		
 		bottomBar.draw(g);
 		
 		if(isPaused()) {
@@ -140,7 +146,7 @@ public class Simulation extends JPanel implements Runnable {
 		long delta = 0;
 		
 		// TODO PLAYGROUND
-		playground = new Playground("Verkehrsunfall B2", new Dimension(1024, 512), new Point(100, 200));
+		playground = new Playground("Verkehrsunfall B2", new Dimension(512, 512), new Point(100, 200));
 		
 		while(frame.isVisible()) {
 			// Calculate Delta
@@ -234,12 +240,15 @@ public class Simulation extends JPanel implements Runnable {
 	 * MouseHandler
 	 */
 	public class MouseHandler extends MouseAdapter {
-		private Point mouse;
-		private Point lastDrag;
-		private boolean mousebutton[] = new boolean[3];
+		public long lastMoved;
+		public Point mouse;
+		public Point lastDrag;
+		public boolean mousebutton[] = new boolean[3];
 		
 		@Override
 		public void mouseMoved(MouseEvent e) {
+			lastMoved = System.currentTimeMillis();
+			
 			mouse = e.getPoint();
 			lastDrag = mouse;
         	
@@ -266,9 +275,6 @@ public class Simulation extends JPanel implements Runnable {
 						se.setX(se.getX() + drag.x - lastDrag.x);
 						se.setY(se.getY() + drag.y - lastDrag.y);
 					}
-				} else if(playground.getSelectedEntity() != null) {
-					System.out.println("Rotate...");
-					// TODO Rotate
 				}
 			}
 			
@@ -298,6 +304,11 @@ public class Simulation extends JPanel implements Runnable {
 		public void mouseReleased(MouseEvent e) {
 			if(e.getButton() != MouseEvent.NOBUTTON) {
 				mousebutton[e.getButton() - 1] = false;
+				popupMenu = null;
+			}
+			
+			if(e.getButton() == MouseEvent.BUTTON3 && playground.getSelectedEntity() != null) {
+				popupMenu = new PopupMenu(e.getX(), e.getY(), 100, 200, null); // TODO
 			}
 		}
 		

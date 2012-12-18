@@ -6,11 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import net.gerritk.fdsim.Simulation;
 import net.gerritk.util.GraphicsUtil;
 
 public class Button extends InterfaceObject {
 	private static final long serialVersionUID = -2273998620740218304L;
 	
+	private ToolTip tip;
 	private boolean hover;
 	private Color cText, cNormal, cHover;
 	private String actionCmd[] = new String[3];
@@ -48,6 +50,10 @@ public class Button extends InterfaceObject {
 		GraphicsUtil.setAlpha(g, 0.7f);
 		g.drawRect((int) getX(), (int) getY(), (int) getWidth() - 1, (int) getHeight() - 1);
 		GraphicsUtil.setAlpha(g, 1);
+		
+		if(hover && tip != null && Simulation.getMouseHandler().lastMoved > 5000) {
+			tip.draw(g);
+		}
 	}
 	
 	public void press(int btn) {
@@ -120,6 +126,18 @@ public class Button extends InterfaceObject {
 	public void setActionCommand(String cmd) {
 		for(int i = 0; i < actionCmd.length; i++) {
 			actionCmd[i] = cmd;
+		}
+	}
+
+	public String getToolTip() {
+		return tip.getTip();
+	}
+
+	public void setToolTip(String tip) {
+		if(tip == null) {
+			this.tip = null;
+		} else {
+			this.tip = new ToolTip((int) getWidth() + 2, (int) - getHeight() - 2, tip, this);
 		}
 	}
 }
