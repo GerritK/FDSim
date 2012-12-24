@@ -16,7 +16,7 @@ public class CreateBar extends Bar {
 	public CreateBar(int x, int width) {
 		super(x, 50, width, 0, null);
 		
-		btnToggle = new Button(width - 8, 20, 8, (int) (getHeight() - getY()) - 40, Color.BLACK, Color.DARK_GRAY, Color.GRAY, SimColor.FIRE_RED, this);
+		btnToggle = new Button(width - 8, 20, 8, (int) (getHeight() - getY()) - 40, Color.BLACK, SimColor.GUI_BG, SimColor.BLUE, SimColor.GUI_BORDER, this);
 		btnToggle.setActionCommand("createBar");
 		btnToggle.setToolTip("Menü ein-/ausblenden");
 		btnToggle.addActionListener(Simulation.getButtonHandler());
@@ -27,9 +27,9 @@ public class CreateBar extends Bar {
 	
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.DARK_GRAY);
+		g.setColor(SimColor.GUI_BG);
 		g.fillRoundRect((int) getX() - 4, (int) getY(), (int) getWidth() + 4, Simulation.getInstance().getHeight() - (int) getY() * 2, 8, 8);
-		g.setColor(SimColor.FIRE_RED);
+		g.setColor(SimColor.GUI_BORDER);
 		g.drawRoundRect((int) getX() - 4, (int) getY(), (int) getWidth() + 3, Simulation.getInstance().getHeight() - (int) getY() * 2 - 1, 8, 8);
 		g.drawLine((int) (getX() + getWidth()) - 8, (int) getY(), (int) (getX() + getWidth()) - 8, (int) (getHeight()) - 1);
 		

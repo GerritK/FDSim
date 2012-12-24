@@ -54,18 +54,18 @@ public class BottomBar extends Bar {
 	public void draw(Graphics2D g) {
 		if(!isVisible()) return;
 		
-		g.setColor(Color.DARK_GRAY);
+		g.setColor(SimColor.GUI_BG);
 		g.fillRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight());
 		
 		// LINES
-		g.setColor(SimColor.FIRE_RED);
+		g.setColor(SimColor.GUI_BORDER);
 		g.drawLine((int) getX(), (int) getY(), (int) getWidth(), (int) getY());
 		g.drawLine((int) getX() + 124, (int) getY(), (int) getX() + 124, (int) (getY() + getHeight()));
 		g.drawLine((int) (getX() + getWidth()) - 124, (int) getY(), (int) (getX() + getWidth()) - 124, (int) (getY() + getHeight()));
 		g.drawLine((int) getX(), (int) (getY() + getHeight()) - 1, (int) getWidth(), (int) (getY() + getHeight()) - 1);
 		
 		// CLOCK
-		g.setColor(SimColor.FIRE_RED);
+		g.setColor(SimColor.GUI_BORDER);
 		g.setFont(Simulation.getClockFont().getFont(30));
 		g.drawString(TimeUtil.formatMillis(Simulation.getSimulationTime()), 10, (int) getY() + 25);
 		

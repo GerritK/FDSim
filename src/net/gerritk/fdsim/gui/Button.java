@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import net.gerritk.fdsim.Simulation;
+import net.gerritk.fdsim.resource.SimColor;
 
 public class Button extends InterfaceObject {
 	private static final long serialVersionUID = -2273998620740218304L;
@@ -29,7 +30,7 @@ public class Button extends InterfaceObject {
 	}
 	
 	public Button(int x, int y, int width, int height, InterfaceObject ref) {
-		this(x, y, width, height, Color.BLACK, Color.GRAY, Color.LIGHT_GRAY, Color.DARK_GRAY, ref);
+		this(x, y, width, height, SimColor.GUI_BUTTON_TEXT, SimColor.GUI_BUTTON, SimColor.GUI_BUTTON_HOVER, SimColor.GUI_BUTTON_BORDER, ref);
 	}
 	
 	@Override

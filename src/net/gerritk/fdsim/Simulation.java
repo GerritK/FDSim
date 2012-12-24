@@ -74,7 +74,7 @@ public class Simulation extends JPanel implements Runnable {
 		
 		// GUI
 		bottomBar = new BottomBar(0, 30);
-		createBar = new CreateBar(0, 80);
+		createBar = new CreateBar(0, 100);
 		
 		frame = new JFrame("Feuerwehr Planspiel Simulation " + VERSION);
 		frame.addKeyListener(keyHandler);
@@ -132,7 +132,7 @@ public class Simulation extends JPanel implements Runnable {
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, getWidth(), getHeight());
 			GraphicsUtil.setAlpha(g, 1);
-			g.setColor(SimColor.FIRE_RED);
+			g.setColor(SimColor.GUI_BORDER);
 			g.setFont(new Font("Verdana", Font.BOLD, 24));
 			g.drawString(paused, (getWidth() - StringUtil.getWidth(paused, g)) / 2, (getHeight() - StringUtil.getHeight(paused, g)) / 2);
 			g.setColor(Color.WHITE);

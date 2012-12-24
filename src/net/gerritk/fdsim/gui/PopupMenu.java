@@ -1,8 +1,8 @@
 package net.gerritk.fdsim.gui;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 
+import net.gerritk.fdsim.resource.SimColor;
 import net.gerritk.util.StringUtil;
 
 public class PopupMenu extends InterfaceObject {
@@ -18,17 +18,17 @@ public class PopupMenu extends InterfaceObject {
 	public void draw(Graphics2D g) {
 		if(isVisible()) {
 			if(getTitle() != null) {
-				g.setColor(Color.LIGHT_GRAY);
+				g.setColor(SimColor.GUI_POPUP);
 				g.fillRoundRect((int) getX(), (int) getY() - StringUtil.getHeight(getTitle(), g), StringUtil.getWidth(getTitle(), g) + 10, StringUtil.getHeight(getTitle(), g) + 5, 8, 8);
-				g.setColor(Color.GRAY);
+				g.setColor(SimColor.GUI_POPUP_BORDER);
 				g.drawRoundRect((int) getX(), (int) getY() - StringUtil.getHeight(getTitle(), g), StringUtil.getWidth(getTitle(), g) + 9, StringUtil.getHeight(getTitle(), g) + 5, 8, 8);
-				g.setColor(Color.BLACK);
+				g.setColor(SimColor.GUI_POPUP_TEXT);
 				g.drawString(getTitle(), (int) getX() + 5, (int) getY() - 3);
 			}
 			
-			g.setColor(Color.LIGHT_GRAY);
+			g.setColor(SimColor.GUI_POPUP);
 			g.fillRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight());
-			g.setColor(Color.GRAY);
+			g.setColor(SimColor.GUI_POPUP_BORDER);
 			g.drawRect((int) getX(), (int) getY(), (int) getWidth() - 1, (int) getHeight() - 1);
 		}
 	}
