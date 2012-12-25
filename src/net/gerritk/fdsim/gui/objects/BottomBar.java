@@ -2,12 +2,12 @@ package net.gerritk.fdsim.gui.objects;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
 
 import net.gerritk.fdsim.Simulation;
 import net.gerritk.fdsim.gui.*;
 import net.gerritk.fdsim.resource.SimColor;
 import net.gerritk.fdsim.resource.SimImage;
+import net.gerritk.util.ExGraphics;
 import net.gerritk.util.TimeUtil;
 
 public class BottomBar extends Bar {
@@ -51,11 +51,13 @@ public class BottomBar extends Bar {
 	}
 
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(ExGraphics g) {
 		if(!isVisible()) return;
 		
 		g.setColor(SimColor.GUI_BG);
+		g.setAlpha(0.6f);
 		g.fillRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight());
+		g.setAlpha(1);
 		
 		// LINES
 		g.setColor(SimColor.GUI_BORDER);
@@ -67,7 +69,7 @@ public class BottomBar extends Bar {
 		// CLOCK
 		g.setColor(SimColor.GUI_BORDER);
 		g.setFont(Simulation.getClockFont().getFont(30));
-		g.drawString(TimeUtil.formatMillis(Simulation.getSimulationTime()), 10, (int) getY() + 25);
+		g.drawString(TimeUtil.formatMillis(Simulation.getSimulationTime(true)), 10, (int) getY() + 25);
 		
 		// MODE
 		g.setColor(Color.WHITE);

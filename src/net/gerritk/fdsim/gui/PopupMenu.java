@@ -1,8 +1,7 @@
 package net.gerritk.fdsim.gui;
 
-import java.awt.Graphics2D;
-
 import net.gerritk.fdsim.resource.SimColor;
+import net.gerritk.util.ExGraphics;
 import net.gerritk.util.StringUtil;
 
 public class PopupMenu extends InterfaceObject {
@@ -15,7 +14,7 @@ public class PopupMenu extends InterfaceObject {
 	}
 	
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(ExGraphics g) {
 		if(isVisible()) {
 			if(getTitle() != null) {
 				g.setColor(SimColor.GUI_POPUP);

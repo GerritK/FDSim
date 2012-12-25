@@ -88,7 +88,8 @@ public class Simulation extends JPanel implements Runnable {
 	}
 	
 	public static void reset() {
-		playground = new Playground(playground.getTitle(), playground.getSize(), playground.getStart());
+		simTime = 0;
+		playground = new Playground(playground.getTitle(), playground.getSize(), playground.getStart(), playground.getStartTime());
 	}
 	
 	public void update(long delta) {
@@ -107,7 +108,7 @@ public class Simulation extends JPanel implements Runnable {
 		createBar.update(delta);
 	}
 	
-	public void draw(Graphics2D g) {
+	public void draw(ExGraphics g) {
 		g.setColor(SimColor.VOID);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
@@ -128,10 +129,10 @@ public class Simulation extends JPanel implements Runnable {
 			String paused = "Pausiert";
 			String pausedInfo = "Drücken Sie 'P' oder den Pausieren-Knopf zum Fortfahren.";
 			
-			GraphicsUtil.setAlpha(g, 0.4f);
+			g.setAlpha(0.4f);
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, getWidth(), getHeight());
-			GraphicsUtil.setAlpha(g, 1);
+			g.setAlpha(1);
 			g.setColor(SimColor.GUI_BORDER);
 			g.setFont(new Font("Verdana", Font.BOLD, 24));
 			g.drawString(paused, (getWidth() - StringUtil.getWidth(paused, g)) / 2, (getHeight() - StringUtil.getHeight(paused, g)) / 2);
@@ -151,7 +152,7 @@ public class Simulation extends JPanel implements Runnable {
 		long delta = 0;
 		
 		// TODO PLAYGROUND
-		playground = new Playground("Wohnhausbrand Siekgraben", new Dimension(800, 800), new Point(100, 200));
+		playground = new Playground("Wohnhausbrand Siekgraben", new Dimension(800, 800), new Point(100, 200), 5 * 60 * 60 * 1000);
 		
 		while(frame.isVisible()) {
 			// Calculate Delta
@@ -177,7 +178,7 @@ public class Simulation extends JPanel implements Runnable {
 	}
 	
 	public void paintComponent(Graphics gra) {
-		Graphics2D g = (Graphics2D) gra;
+		ExGraphics g = new ExGraphics((Graphics2D) gra);
 		g.setRenderingHints(renderMap);
 		draw(g);
 	}
@@ -187,7 +188,7 @@ public class Simulation extends JPanel implements Runnable {
 	 */
 	public void saveScreenshot() {
 		BufferedImage shot = new BufferedImage(getWidth(), getHeight(), BufferedImage.TRANSLUCENT);
-		Graphics2D g = shot.createGraphics();
+		ExGraphics g = new ExGraphics(shot.createGraphics());
 		
 		g.setRenderingHints(renderMap);
 		draw(g);
@@ -377,7 +378,11 @@ public class Simulation extends JPanel implements Runnable {
 		return playground;
 	}
 	
-	public static long getSimulationTime() {
+	public static long getSimulationTime(boolean play) {
+		if(play && playground != null) {
+			return simTime + playground.getStartTime();
+		}
+		
 		return simTime;
 	}
 	

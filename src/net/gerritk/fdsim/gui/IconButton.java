@@ -1,16 +1,17 @@
 package net.gerritk.fdsim.gui;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+
+import net.gerritk.util.ExGraphics;
 
 public class IconButton extends Button {
 	private static final long serialVersionUID = -7479202913149739570L;
 	
 	private BufferedImage img;
 	
-	public IconButton(BufferedImage img, int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, Color cBorder, InterfaceObject ref) {
-		super(x, y, width, height, cText, cNormal, cHover, cBorder, ref);
+	public IconButton(BufferedImage img, int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, Color cBorder, float alpha, InterfaceObject ref) {
+		super(x, y, width, height, cText, cNormal, cHover, cBorder, alpha, ref);
 		setImage(img);
 	}
 	
@@ -20,7 +21,7 @@ public class IconButton extends Button {
 	}
 
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(ExGraphics g) {
 		if(!isVisible()) return;
 		
 		super.draw(g);

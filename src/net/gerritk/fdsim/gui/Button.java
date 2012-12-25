@@ -1,13 +1,13 @@
 package net.gerritk.fdsim.gui;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import net.gerritk.fdsim.Simulation;
 import net.gerritk.fdsim.resource.SimColor;
+import net.gerritk.util.ExGraphics;
 
 public class Button extends InterfaceObject {
 	private static final long serialVersionUID = -2273998620740218304L;
@@ -18,19 +18,21 @@ public class Button extends InterfaceObject {
 	private boolean hover;
 	private Color cText, cNormal, cHover, cBorder;
 	private int style;
+	private float alpha = 0;
 	private String actionCmd[] = new String[3];
 	private ArrayList<ActionListener> al = new ArrayList<ActionListener>();
 	
-	public Button(int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, Color cBorder, InterfaceObject ref) {
+	public Button(int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, Color cBorder, float alpha, InterfaceObject ref) {
 		super(x, y, width, height, ref);
 		setColorText(cText);
 		setColorNormal(cNormal);
 		setColorHover(cHover);
 		setColorBorder(cBorder);
+		setAlpha(alpha);
 	}
 	
 	public Button(int x, int y, int width, int height, InterfaceObject ref) {
-		this(x, y, width, height, SimColor.GUI_BUTTON_TEXT, SimColor.GUI_BUTTON, SimColor.GUI_BUTTON_HOVER, SimColor.GUI_BUTTON_BORDER, ref);
+		this(x, y, width, height, SimColor.GUI_BUTTON_TEXT, SimColor.GUI_BUTTON, SimColor.GUI_BUTTON_HOVER, SimColor.GUI_BUTTON_BORDER, 1, ref);
 	}
 	
 	@Override
@@ -39,7 +41,7 @@ public class Button extends InterfaceObject {
 	}
 	
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(ExGraphics g) {
 		if(!isVisible()) return;
 		
 		if(isHover()) {
@@ -48,16 +50,20 @@ public class Button extends InterfaceObject {
 			g.setColor(getColorNormal());		
 		}
 		
+		g.setAlpha(getAlpha());
+		
 		switch(style) {
 			default:
 			case DEFAULT:
 				g.fillRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight());
+				g.setAlpha(1);
 				g.setColor(getColorBorder());
 				g.drawRect((int) getX(), (int) getY(), (int) getWidth() - 1, (int) getHeight() - 1);
 				break;
 			
 			case ROUND_RECT:
 				g.fillRoundRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight(), 8, 8);
+				g.setAlpha(1);
 				g.setColor(getColorBorder());
 				g.drawRoundRect((int) getX(), (int) getY(), (int) getWidth() - 1, (int) getHeight() - 1, 8, 8);
 				break;
@@ -81,6 +87,14 @@ public class Button extends InterfaceObject {
 	/*
 	 * Getter & Setter	
 	 */
+	public void setAlpha(float alpha) {
+		this.alpha = alpha;
+	}
+	
+	public float getAlpha() {
+		return alpha;
+	}
+	
 	public boolean isHover() {
 		return hover;
 	}

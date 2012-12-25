@@ -1,8 +1,8 @@
 package net.gerritk.fdsim.gui;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 
+import net.gerritk.util.ExGraphics;
 import net.gerritk.util.StringUtil;
 
 public class ToolTip extends InterfaceObject {
@@ -17,7 +17,7 @@ public class ToolTip extends InterfaceObject {
 	}
 	
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(ExGraphics g) {
 		setWidth(StringUtil.getWidth(getTip(), g));
 		setHeight(StringUtil.getHeight(getTip(), g));
 		

@@ -1,7 +1,6 @@
 package net.gerritk.fdsim.entities;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import net.gerritk.fdsim.Playground;
 import net.gerritk.fdsim.interfaces.*;
 import net.gerritk.fdsim.lights.Light;
-import net.gerritk.util.GraphicsUtil;
+import net.gerritk.util.ExGraphics;
 import net.gerritk.util.MathUtil;
 
 public abstract class Entity implements Drawable, Updateable {
@@ -41,7 +40,7 @@ public abstract class Entity implements Drawable, Updateable {
 	}
 	
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(ExGraphics g) {
 		AffineTransform af = g.getTransform();
         g.rotate(Math.toRadians(- getRotation()), getScreenX() + getImage().getWidth() / 2 + 1, getScreenY() + getImage().getHeight() / 2 + 1);
 		
@@ -52,9 +51,9 @@ public abstract class Entity implements Drawable, Updateable {
 				g.setColor(Color.GREEN);
 			}
 			
-			GraphicsUtil.setThickness(g, 3);
+			g.setThickness(3);
 			g.drawRoundRect(getScreenX() - BORDER, getScreenY() - BORDER, img.getWidth() + BORDER * 2, img.getHeight() + BORDER * 2, 3, 3);
-			GraphicsUtil.setThickness(g, 1);
+			g.setThickness(1);
 		}
 		
         g.drawImage(getImage(), getScreenX(), getScreenY(), null);

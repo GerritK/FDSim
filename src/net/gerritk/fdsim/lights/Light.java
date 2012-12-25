@@ -1,10 +1,10 @@
 package net.gerritk.fdsim.lights;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import net.gerritk.fdsim.entities.Entity;
 import net.gerritk.fdsim.interfaces.*;
+import net.gerritk.util.ExGraphics;
 
 public class Light implements Drawable, Updateable {
 	public static final int TYPE_BLUELIGHT = 0;
@@ -30,7 +30,7 @@ public class Light implements Drawable, Updateable {
 	}
 	
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(ExGraphics g) {
 		if(isEnabled()) {
 			g.drawImage(getImage(), getScreenX() - getImage().getWidth() / 2, getScreenY() - getImage().getHeight() / 2, null);
 		}

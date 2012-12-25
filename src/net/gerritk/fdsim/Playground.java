@@ -2,12 +2,12 @@ package net.gerritk.fdsim;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 
 import net.gerritk.fdsim.entities.*;
 import net.gerritk.fdsim.entities.vehicles.*;
+import net.gerritk.util.ExGraphics;
 import net.gerritk.util.StringUtil;
 
 public class Playground {
@@ -16,6 +16,7 @@ public class Playground {
 	private int id;
 	private String title;
 	private ArrayList<Entity> entities;
+	private long startTime;
 	
 	private Dimension size;
 	private int offsetX, offsetY;
@@ -23,13 +24,14 @@ public class Playground {
 	
 	private Entity selectedEntity;
 	
-	public Playground(String title, Dimension size, Point start) {
+	public Playground(String title, Dimension size, Point start, long startTime) {
 		this.id = lastID++;
 		this.entities = new ArrayList<Entity>();
 		
 		setTitle(title);
 		setSize(size);
 		setStart(start);
+		setStartTime(startTime);
 		
 		goStart();
 		
@@ -74,7 +76,7 @@ public class Playground {
 		}
 	}
 	
-	public void draw(Graphics2D g) {
+	public void draw(ExGraphics g) {
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRoundRect(offsetX + 1, offsetY - 15, StringUtil.getWidth(getTitle(), g) + 11, 20, 8, 8);
 		g.setColor(Color.GRAY);
@@ -213,5 +215,13 @@ public class Playground {
 		}
 		
 		return tmp;
+	}
+
+	public long getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
 	}
 }

@@ -2,8 +2,8 @@ package net.gerritk.fdsim.gui;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
 
+import net.gerritk.util.ExGraphics;
 import net.gerritk.util.StringUtil;
 
 public class TextButton extends Button {
@@ -12,8 +12,8 @@ public class TextButton extends Button {
 	private String text;
 	private Font font = new Font("Verdana", Font.PLAIN, 12);
 	
-	public TextButton(String text, int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, Color cBorder, Font font, InterfaceObject ref) {
-		super(x, y, width, height, cText, cNormal, cHover, cBorder, ref);
+	public TextButton(String text, int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, Color cBorder, Font font, float alpha, InterfaceObject ref) {
+		super(x, y, width, height, cText, cNormal, cHover, cBorder, alpha, ref);
 		setText(text);
 		setFont(font);
 	}	
@@ -24,7 +24,7 @@ public class TextButton extends Button {
 	}
 
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(ExGraphics g) {
 		if(!isVisible()) return;
 		
 		super.draw(g);

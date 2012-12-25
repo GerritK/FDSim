@@ -1,9 +1,9 @@
 package net.gerritk.fdsim.lights;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import net.gerritk.fdsim.entities.Entity;
+import net.gerritk.util.ExGraphics;
 
 public class Bluelight extends Light {
 	private long timerFrequence;
@@ -35,7 +35,7 @@ public class Bluelight extends Light {
 	}
 	
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(ExGraphics g) {
 		if(flash) {
 			super.draw(g);
 		}

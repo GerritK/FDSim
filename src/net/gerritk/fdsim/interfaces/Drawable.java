@@ -1,7 +1,7 @@
 package net.gerritk.fdsim.interfaces;
 
-import java.awt.Graphics2D;
+import net.gerritk.util.ExGraphics;
 
 public interface Drawable {
-	public void draw(Graphics2D g);
+	public void draw(ExGraphics g);
 }
