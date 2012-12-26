@@ -152,7 +152,7 @@ public class Simulation extends JPanel implements Runnable {
 		long delta = 0;
 		
 		// TODO PLAYGROUND
-		playground = new Playground("Wohnhausbrand Siekgraben", new Dimension(800, 800), new Point(100, 200), 5 * 60 * 60 * 1000);
+		playground = new Playground("Wohnhausbrand Siekgraben", new Dimension(800, 800), new Point(100, 200), TimeUtil.getTimeInMillis(13, 49, 32, 0));
 		
 		while(frame.isVisible()) {
 			// Calculate Delta
