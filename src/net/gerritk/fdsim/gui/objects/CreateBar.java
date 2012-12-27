@@ -3,8 +3,11 @@ package net.gerritk.fdsim.gui.objects;
 import java.awt.Color;
 
 import net.gerritk.fdsim.Simulation;
+import net.gerritk.fdsim.entities.Entity;
 import net.gerritk.fdsim.gui.*;
+import net.gerritk.fdsim.input.objects.CreateHandler;
 import net.gerritk.fdsim.resource.SimColor;
+import net.gerritk.fdsim.resource.SimImage;
 import net.gerritk.util.ExGraphics;
 
 public class CreateBar extends Bar {
@@ -13,14 +16,30 @@ public class CreateBar extends Bar {
 	private boolean extended;
 	private Button btnToggle;
 	
+	private CreateButton create[];
+	private Entity toCreate;
+	private CreateButton toCreateButton;
+	
 	public CreateBar(int x, int width) {
 		super(x, 50, width, 0, null);
 		
-		btnToggle = new Button(width - 8, 20, 8, (int) (getHeight() - getY()) - 40, Color.BLACK, SimColor.GUI_BG, SimColor.BLUE, SimColor.GUI_BORDER, 0.6f, this);
+		setButtonHandler(new CreateHandler(this));
+		
+		btnToggle = new Button(width - 8, 20, 8, (int) (getHeight() - getY()) - 40, Color.BLACK, SimColor.GUI_BG, SimColor.GUI_BORDER, SimColor.GUI_BORDER, SimColor.GUI_BORDER, 0.2f, this);
 		btnToggle.setActionCommand("createBar");
 		btnToggle.setToolTip("Menü ein-/ausblenden");
 		btnToggle.addActionListener(Simulation.getButtonHandler());
-		Simulation.buttons.add(btnToggle);
+		
+		// TODO change it later
+		create = new CreateButton[2];
+		
+		create[0] = new CreateButton(SimImage.CREATE_MTF, "MTF", 2, 2, 3, width - 12, 35, this);
+		create[0].setActionCommand("mtf");
+		create[0].addActionListener(getButtonHandler());
+		
+		create[1] = new CreateButton(SimImage.CREATE_TSFW, "TSF-W", 3, 2, 40, width - 12, 35, this);
+		create[1].setActionCommand("tsfw");
+		create[1].addActionListener(getButtonHandler());
 		
 		setExtended(false);
 	}
@@ -36,6 +55,10 @@ public class CreateBar extends Bar {
 		g.drawLine((int) (getX() + getWidth()) - 8, (int) getY(), (int) (getX() + getWidth()) - 8, (int) (getHeight()) - 1);
 		
 		btnToggle.draw(g);
+		
+		for(CreateButton b : create) {
+			b.draw(g);
+		}
 	}
 	
 	@Override
@@ -44,6 +67,10 @@ public class CreateBar extends Bar {
 		btnToggle.setHeight((int) (getHeight() - getY()) - 40);
 		
 		btnToggle.update(delta);
+		
+		for(CreateButton b : create) {
+			b.update(delta);
+		}
 	}
 	
 	/*
@@ -61,5 +88,21 @@ public class CreateBar extends Bar {
 		} else {
 			setX((int) - getWidth() + 8);
 		}
+	}
+
+	public Entity getToCreate() {
+		return toCreate;
+	}
+
+	public void setToCreate(Entity toCreate) {
+		this.toCreate = toCreate;
+	}
+
+	public CreateButton getToCreateButton() {
+		return toCreateButton;
+	}
+
+	public void setToCreateButton(CreateButton toCreateButton) {
+		this.toCreateButton = toCreateButton;
 	}
 }

@@ -15,6 +15,7 @@ import net.gerritk.fdsim.gui.Button;
 import net.gerritk.fdsim.gui.PopupMenu;
 import net.gerritk.fdsim.gui.objects.*;
 import net.gerritk.fdsim.resource.SimColor;
+import net.gerritk.fdsim.resource.SimFont;
 import net.gerritk.util.*;
 
 public class Simulation extends JPanel implements Runnable {
@@ -25,7 +26,6 @@ public class Simulation extends JPanel implements Runnable {
 	
 	private static Simulation instance;
 	private static Playground playground;
-	private static OwnFont clockFont;
 	private static long simTime;
 	private static long lastRunned;
 	
@@ -53,9 +53,6 @@ public class Simulation extends JPanel implements Runnable {
 		mouseHandler = new MouseHandler();
 		buttonHandler = new ButtonHandler();
 		frameHandler = new FrameHandler();
-		
-		// FONT
-		clockFont = new OwnFont("DS-DIGIT.TTF", Font.TRUETYPE_FONT);
 		
 		renderMap = new HashMap<RenderingHints.Key, Object>();
 		renderMap.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -92,7 +89,7 @@ public class Simulation extends JPanel implements Runnable {
 		playground = new Playground(playground.getTitle(), playground.getSize(), playground.getStart(), playground.getStartTime());
 	}
 	
-	public void update(long delta) {
+	public void update(long delta) {		
 		if(!isPaused()) {
 			if(playground != null) {
 				playground.update(delta);
@@ -134,16 +131,16 @@ public class Simulation extends JPanel implements Runnable {
 			g.fillRect(0, 0, getWidth(), getHeight());
 			g.setAlpha(1);
 			g.setColor(SimColor.GUI_BORDER);
-			g.setFont(new Font("Verdana", Font.BOLD, 24));
+			g.setFont(SimFont.PAUSED_BIG);
 			g.drawString(paused, (getWidth() - StringUtil.getWidth(paused, g)) / 2, (getHeight() - StringUtil.getHeight(paused, g)) / 2);
 			g.setColor(Color.WHITE);
-			g.setFont(new Font("Verdana", Font.ITALIC, 14));
+			g.setFont(SimFont.PAUSED_SMALL);
 			g.drawString(pausedInfo, (getWidth() - StringUtil.getWidth(pausedInfo, g)) / 2, (getHeight() + StringUtil.getHeight(pausedInfo, g)) / 2);
 		}
 		
 		// COPY
 		g.setColor(Color.GRAY);
-		g.setFont(new Font("Verdana", Font.PLAIN, 8));
+		g.setFont(SimFont.COPY);
 		g.drawString(COPY, getWidth() - StringUtil.getWidth(COPY, g) - 2, StringUtil.getHeight(COPY, g));
 	}
 	
@@ -258,14 +255,18 @@ public class Simulation extends JPanel implements Runnable {
 			mouse = e.getPoint();
 			lastDrag = mouse;
         	
-			for(Button b : buttons) {
-	        	if(b.contains(mouse)) {
-	        		b.setHover(true);
-	        		frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
-	        	} else if(b.isHover()) {
-	        		b.setHover(false);
-	        		frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-	        	}
+			if(createBar.getToCreate() == null) {
+				for(Button b : buttons) {
+		        	if(b.contains(mouse)) {
+		        		b.setHover(true);
+		        		frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		        	} else if(b.isHover()) {
+		        		b.setHover(false);
+		        		frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		        	}
+				}
+			} else {
+				frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 			}
 		}
 		
@@ -293,20 +294,39 @@ public class Simulation extends JPanel implements Runnable {
 		public void mousePressed(MouseEvent e) {
 			mouse = e.getPoint();
 			
-			for(Button b : buttons) {
-				if(b.contains(mouse)) {
-					b.press(e.getButton());
+			if(createBar.getToCreate() == null) {
+				for(Button b : buttons) {
+					if(b.contains(mouse)) {
+						b.press(e.getButton());
+					}
 				}
-			}
 			
-			if(e.getButton() != MouseEvent.NOBUTTON) {
-				mousebutton[e.getButton() - 1] = true;
-				
-				if(mousebutton[0] && !isPaused() && !keyHandler.keyControl) {
-					playground.setSelectedEntity(playground.getEntity(mouse));
-				} else if(mousebutton[2] && !isPaused() && (playground.getEntity(mouse) == null || playground.getEntity(mouse) != playground.getSelectedEntity())) {
-					playground.setSelectedEntity(null);
+				if(e.getButton() != MouseEvent.NOBUTTON && !createBar.contains(mouse) && !bottomBar.contains(mouse)) {
+					mousebutton[e.getButton() - 1] = true;
+					
+					if(mousebutton[0] && !isPaused() && !keyHandler.keyControl) {
+						playground.setSelectedEntity(playground.getEntity(mouse));
+					} else if(mousebutton[2] && !isPaused() && (playground.getEntity(mouse) == null || playground.getEntity(mouse) != playground.getSelectedEntity())) {
+						playground.setSelectedEntity(null);
+					}
 				}
+			} else {
+				Entity ec = createBar.getToCreate();
+				
+				if(e.getButton() == MouseEvent.BUTTON1) {
+					ec.setPlayground(playground);
+					ec.setX(mouse.x - playground.getOffsetX() - ec.getImage().getWidth() / 2);
+					ec.setY(mouse.y - playground.getOffsetY() - ec.getImage().getHeight() / 2);
+					
+					playground.addEntity(ec);
+					
+					createBar.getToCreateButton().setCount(createBar.getToCreateButton().getCount() - 1);
+				}
+				
+				frame.setCursor(Cursor.getDefaultCursor());
+				createBar.getToCreateButton().setHover(false);
+				createBar.setToCreate(null);
+				createBar.setToCreateButton(null);
 			}
 		}
 		
@@ -384,10 +404,6 @@ public class Simulation extends JPanel implements Runnable {
 		}
 		
 		return simTime;
-	}
-	
-	public static OwnFont getClockFont() {
-		return clockFont;
 	}
 	
 	public static int getMode() {

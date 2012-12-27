@@ -1,6 +1,7 @@
 package net.gerritk.fdsim.gui;
 
 import java.awt.Color;
+import java.awt.Font;
 
 import net.gerritk.util.ExGraphics;
 import net.gerritk.util.StringUtil;
@@ -18,6 +19,8 @@ public class ToolTip extends InterfaceObject {
 	
 	@Override
 	public void draw(ExGraphics g) {
+		g.setFont(new Font("Verdana", Font.PLAIN, 12));
+		
 		setWidth(StringUtil.getWidth(getTip(), g));
 		setHeight(StringUtil.getHeight(getTip(), g));
 		

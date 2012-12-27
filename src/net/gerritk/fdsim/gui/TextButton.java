@@ -3,6 +3,7 @@ package net.gerritk.fdsim.gui;
 import java.awt.Color;
 import java.awt.Font;
 
+import net.gerritk.fdsim.resource.SimFont;
 import net.gerritk.util.ExGraphics;
 import net.gerritk.util.StringUtil;
 
@@ -10,10 +11,10 @@ public class TextButton extends Button {
 	private static final long serialVersionUID = 6212322680296307952L;
 	
 	private String text;
-	private Font font = new Font("Verdana", Font.PLAIN, 12);
+	private Font font = SimFont.TEXT;
 	
-	public TextButton(String text, int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, Color cBorder, Font font, float alpha, InterfaceObject ref) {
-		super(x, y, width, height, cText, cNormal, cHover, cBorder, alpha, ref);
+	public TextButton(String text, int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, Color cChecked, Color cBorder, Font font, float alpha, InterfaceObject ref) {
+		super(x, y, width, height, cText, cNormal, cHover, cChecked, cBorder, alpha, ref);
 		setText(text);
 		setFont(font);
 	}	

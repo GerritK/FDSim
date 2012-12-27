@@ -224,4 +224,12 @@ public class Playground {
 	public void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}
+	
+	public void addEntity(Entity e) {
+		entities.add(e);
+	}
+	
+	public void removeEntity(Entity e) {
+		entities.remove(e);
+	}
 }

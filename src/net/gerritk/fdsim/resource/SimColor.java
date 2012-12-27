@@ -15,6 +15,7 @@ public abstract class SimColor {
 			
 			GUI_BUTTON = Color.GRAY,
 			GUI_BUTTON_HOVER = Color.LIGHT_GRAY,
+			GUI_BUTTON_CHECKED = Color.LIGHT_GRAY,
 			GUI_BUTTON_BORDER = Color.WHITE,
 			GUI_BUTTON_TEXT = Color.BLACK,
 			

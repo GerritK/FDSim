@@ -1,11 +1,11 @@
 package net.gerritk.fdsim.gui.objects;
 
 import java.awt.Color;
-import java.awt.Font;
 
 import net.gerritk.fdsim.Simulation;
 import net.gerritk.fdsim.gui.*;
 import net.gerritk.fdsim.resource.SimColor;
+import net.gerritk.fdsim.resource.SimFont;
 import net.gerritk.fdsim.resource.SimImage;
 import net.gerritk.util.ExGraphics;
 import net.gerritk.util.TimeUtil;
@@ -35,14 +35,12 @@ public class BottomBar extends Bar {
 		btnPause.setToolTip("Simulation pausieren");
 		btnPause.addActionListener(Simulation.getButtonHandler());
 		btnPause.setStyle(Button.ROUND_RECT);
-		Simulation.buttons.add(btnPause);
 		
 		btnReset = new IconButton(SimImage.BTN_RESET, 153, 2, 26, 26, this);
 		btnReset.setActionCommand("reset");
 		btnReset.setToolTip("Szenario zurücksetzen");
 		btnReset.addActionListener(Simulation.getButtonHandler());
 		btnReset.setStyle(Button.ROUND_RECT);
-		Simulation.buttons.add(btnReset);
 	}
 
 	@Override
@@ -68,12 +66,12 @@ public class BottomBar extends Bar {
 		
 		// CLOCK
 		g.setColor(SimColor.GUI_BORDER);
-		g.setFont(Simulation.getClockFont().getFont(30));
+		g.setFont(SimFont.CLOCK.getFont(30));
 		g.drawString(TimeUtil.formatMillis(Simulation.getSimulationTime(true)), 10, (int) getY() + 25);
 		
 		// MODE
 		g.setColor(Color.WHITE);
-		g.setFont(new Font("Verdana", Font.PLAIN, 12));
+		g.setFont(SimFont.TEXT);
 		String m = "Modus: " + (Simulation.getMode() == Simulation.MODE_HOST ? "Host" : "Benutzer");
 		g.drawString(m, (int) (getX() + getWidth()) - 120, (int) (getY() + getHeight()) - 3);
 		

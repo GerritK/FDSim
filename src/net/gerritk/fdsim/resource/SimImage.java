@@ -12,6 +12,9 @@ public abstract class SimImage {
 			BTN_PAUSE = ImageUtil.loadImage("images/gui/btn/pause.png"),
 			BTN_RESET = ImageUtil.loadImage("images/gui/btn/reset.png");
 	
+	public static final BufferedImage CREATE_MTF = ImageUtil.loadImage("images/gui/vehicles/mtf.png"),
+			CREATE_TSFW = ImageUtil.loadImage("images/gui/vehicles/tsfw.png");
+	
 	/*
 	 * Vehicles Images
 	 */

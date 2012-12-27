@@ -16,23 +16,27 @@ public class Button extends InterfaceObject {
 	
 	private ToolTip tip;
 	private boolean hover;
-	private Color cText, cNormal, cHover, cBorder;
+	private Color cText, cNormal, cHover, cBorder, cChecked;
 	private int style;
 	private float alpha = 0;
 	private String actionCmd[] = new String[3];
 	private ArrayList<ActionListener> al = new ArrayList<ActionListener>();
+	private boolean checked, toggleable;
 	
-	public Button(int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, Color cBorder, float alpha, InterfaceObject ref) {
+	public Button(int x, int y, int width, int height, Color cText, Color cNormal, Color cHover, Color cChecked, Color cBorder, float alpha, InterfaceObject ref) {
 		super(x, y, width, height, ref);
 		setColorText(cText);
 		setColorNormal(cNormal);
 		setColorHover(cHover);
+		setColorChecked(cChecked);
 		setColorBorder(cBorder);
 		setAlpha(alpha);
+		
+		Simulation.buttons.add(this);
 	}
 	
 	public Button(int x, int y, int width, int height, InterfaceObject ref) {
-		this(x, y, width, height, SimColor.GUI_BUTTON_TEXT, SimColor.GUI_BUTTON, SimColor.GUI_BUTTON_HOVER, SimColor.GUI_BUTTON_BORDER, 1, ref);
+		this(x, y, width, height, SimColor.GUI_BUTTON_TEXT, SimColor.GUI_BUTTON, SimColor.GUI_BUTTON_HOVER, SimColor.GUI_BUTTON_CHECKED, SimColor.GUI_BUTTON_BORDER, 1, ref);
 	}
 	
 	@Override
@@ -46,8 +50,10 @@ public class Button extends InterfaceObject {
 		
 		if(isHover()) {
 			g.setColor(getColorHover());
+		} else if(isChecked()) {
+			g.setColor(getColorChecked());		
 		} else {
-			g.setColor(getColorNormal());		
+			g.setColor(getColorNormal());			
 		}
 		
 		g.setAlpha(getAlpha());
@@ -81,6 +87,10 @@ public class Button extends InterfaceObject {
 					a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, actionCmd[btn - 1]));
 				}
 			}
+		}
+		
+		if(isToggleable() && btn == 1) {
+			setChecked(!isChecked());
 		}
 	}
 	
@@ -127,6 +137,14 @@ public class Button extends InterfaceObject {
 		this.cNormal = cNormal;
 	}
 	
+	public Color getColorChecked() {
+		return cChecked;
+	}
+
+	public void setColorChecked(Color cChecked) {
+		this.cChecked = cChecked;
+	}
+
 	public Color getColorBorder() {
 		return cBorder;
 	}
@@ -181,5 +199,21 @@ public class Button extends InterfaceObject {
 
 	public void setStyle(int style) {
 		this.style = style;
+	}
+
+	public boolean isChecked() {
+		return checked;
+	}
+
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
+
+	public boolean isToggleable() {
+		return toggleable;
+	}
+
+	public void setToggleable(boolean toggleable) {
+		this.toggleable = toggleable;
 	}
 }
