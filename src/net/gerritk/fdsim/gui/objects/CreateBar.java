@@ -29,17 +29,20 @@ public class CreateBar extends Bar {
 		btnToggle.setActionCommand("createBar");
 		btnToggle.setToolTip("Menü ein-/ausblenden");
 		btnToggle.addActionListener(Simulation.getButtonHandler());
+		Simulation.buttons.add(btnToggle);
 		
 		// TODO change it later
 		create = new CreateButton[2];
 		
-		create[0] = new CreateButton(SimImage.CREATE_MTF, "MTF", 2, 2, 3, width - 12, 35, this);
+		create[0] = new CreateButton(SimImage.CREATE_MTF, "MTF", -1, 2, 3, width - 12, 35, this);
 		create[0].setActionCommand("mtf");
 		create[0].addActionListener(getButtonHandler());
+		Simulation.buttons.add(create[0]);
 		
-		create[1] = new CreateButton(SimImage.CREATE_TSFW, "TSF-W", 3, 2, 40, width - 12, 35, this);
+		create[1] = new CreateButton(SimImage.CREATE_TSFW, "TSF-W", -1, 2, 40, width - 12, 35, this);
 		create[1].setActionCommand("tsfw");
 		create[1].addActionListener(getButtonHandler());
+		Simulation.buttons.add(create[1]);
 		
 		setExtended(false);
 	}

@@ -319,8 +319,11 @@ public class Simulation extends JPanel implements Runnable {
 					ec.setY(mouse.y - playground.getOffsetY() - ec.getImage().getHeight() / 2);
 					
 					playground.addEntity(ec);
+					playground.setSelectedEntity(ec);
 					
-					createBar.getToCreateButton().setCount(createBar.getToCreateButton().getCount() - 1);
+					if(createBar.getToCreateButton().getCount() != -1) {
+						createBar.getToCreateButton().setCount(createBar.getToCreateButton().getCount() - 1);
+					}
 				}
 				
 				frame.setCursor(Cursor.getDefaultCursor());
@@ -434,6 +437,10 @@ public class Simulation extends JPanel implements Runnable {
 	
 	public static ButtonHandler getButtonHandler() {
 		return buttonHandler;
+	}
+	
+	public static boolean showNames() {
+		return bottomBar.showNames();
 	}
 	
 	/*

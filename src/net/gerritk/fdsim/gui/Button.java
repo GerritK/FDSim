@@ -31,8 +31,6 @@ public class Button extends InterfaceObject {
 		setColorChecked(cChecked);
 		setColorBorder(cBorder);
 		setAlpha(alpha);
-		
-		Simulation.buttons.add(this);
 	}
 	
 	public Button(int x, int y, int width, int height, InterfaceObject ref) {

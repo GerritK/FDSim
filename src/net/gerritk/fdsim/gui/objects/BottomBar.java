@@ -15,6 +15,7 @@ public class BottomBar extends Bar {
 	
 	private IconButton btnPause;
 	private IconButton btnReset;
+	private IconButton btnName;
 	
 	public BottomBar(int x, int height) {
 		super(x, 0, 0, height, null);
@@ -35,12 +36,20 @@ public class BottomBar extends Bar {
 		btnPause.setToolTip("Simulation pausieren");
 		btnPause.addActionListener(Simulation.getButtonHandler());
 		btnPause.setStyle(Button.ROUND_RECT);
+		Simulation.buttons.add(btnPause);
 		
 		btnReset = new IconButton(SimImage.BTN_RESET, 153, 2, 26, 26, this);
 		btnReset.setActionCommand("reset");
 		btnReset.setToolTip("Szenario zurücksetzen");
 		btnReset.addActionListener(Simulation.getButtonHandler());
 		btnReset.setStyle(Button.ROUND_RECT);
+		Simulation.buttons.add(btnReset);
+		
+		btnName = new IconButton(SimImage.BTN_MARKER, 180, 2, 26, 26, this);
+		btnName.setToolTip("Namen an-/ausschalten");
+		btnName.setStyle(Button.ROUND_RECT);
+		btnName.setToggleable(true);
+		Simulation.buttons.add(btnName);
 	}
 
 	@Override
@@ -78,6 +87,7 @@ public class BottomBar extends Bar {
 		// GUI
 		btnPause.draw(g);
 		btnReset.draw(g);
+		btnName.draw(g);
 	}
 	
 	/*
@@ -91,5 +101,9 @@ public class BottomBar extends Bar {
 	@Override
 	public double getWidth() {
 		return Simulation.getInstance().getWidth();
+	}
+	
+	public boolean showNames() {
+		return btnName.isChecked();
 	}
 }

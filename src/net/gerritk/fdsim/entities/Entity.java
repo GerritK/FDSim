@@ -9,10 +9,13 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import net.gerritk.fdsim.Playground;
+import net.gerritk.fdsim.Simulation;
 import net.gerritk.fdsim.interfaces.*;
 import net.gerritk.fdsim.lights.Light;
+import net.gerritk.fdsim.resource.SimColor;
 import net.gerritk.util.ExGraphics;
 import net.gerritk.util.MathUtil;
+import net.gerritk.util.StringUtil;
 
 public abstract class Entity implements Drawable, Updateable {
 	protected static final int BORDER = 2;
@@ -25,6 +28,7 @@ public abstract class Entity implements Drawable, Updateable {
 	private ArrayList<Light> lights = new ArrayList<Light>();
 	
 	public Entity(String name, int x, int y, BufferedImage img, Playground playground) {
+		
 		setName(name);
 		setImage(img);
 		setPlayground(playground);
@@ -42,27 +46,54 @@ public abstract class Entity implements Drawable, Updateable {
 	@Override
 	public void draw(ExGraphics g) {
 		AffineTransform af = g.getTransform();
-        g.rotate(Math.toRadians(- getRotation()), getScreenX() + getImage().getWidth() / 2 + 1, getScreenY() + getImage().getHeight() / 2 + 1);
+		g.rotate(Math.toRadians(- getRotation()), getScreenX() + getImage().getWidth() / 2 + 1, getScreenY() + getImage().getHeight() / 2 + 1);
 		
-		if(isSelected()) {
+		if(isSelected()) {			
 			if(collides(null)) {
 				g.setColor(Color.RED);
 			} else {
 				g.setColor(Color.GREEN);
 			}
 			
+			g.setAlpha(0.6f);
 			g.setThickness(3);
 			g.drawRoundRect(getScreenX() - BORDER, getScreenY() - BORDER, img.getWidth() + BORDER * 2, img.getHeight() + BORDER * 2, 3, 3);
 			g.setThickness(1);
+			g.setAlpha(1);
 		}
 		
-        g.drawImage(getImage(), getScreenX(), getScreenY(), null);
-        
-        for(Light l : lights) {
-        	l.draw(g);
-        }
-        
-        g.setTransform(af);
+		g.drawImage(getImage(), getScreenX(), getScreenY(), null);
+		
+		for(Light l : lights) {
+			l.draw(g);
+		}
+		
+		g.setTransform(af);
+		
+		if(Simulation.showNames()) {			
+			int hy = MathUtil.getHeighestPoint(getCollision(), MathUtil.TOP).y + playground.getOffsetY();
+			
+			g.setColor(SimColor.GUI_POPUP_TEXT);
+			g.drawString(getName(), getScreenX() + (getImage().getWidth() - StringUtil.getWidth(getName(), g)) / 2 + 1, hy - 19);
+			
+			int xp[] = new int[] { getScreenX() - 3,
+					getScreenX() - 3,
+					getScreenX() + getImage().getWidth() / 2,
+					getScreenX() + getImage().getWidth() + 3,
+					getScreenX() + getImage().getWidth() + 3,
+					getScreenX() + getImage().getWidth() / 2 };
+			int yp[] = new int[] { hy - 18,
+					hy - 12,
+					hy - 7,
+					hy - 12,
+					hy - 18,
+					hy - 13 };
+			
+			g.setColor(SimColor.GUI_BG);
+			g.setAlpha(0.6f);
+			g.fillPolygon(xp, yp, xp.length);
+			g.setAlpha(1);
+		}
 	}
 	
 	public boolean containsScreen(Point p) {
@@ -102,6 +133,8 @@ public abstract class Entity implements Drawable, Updateable {
 	}
 	
 	public void setName(String name) {
+		if(name.isEmpty()) name = "unnamed";
+		
 		this.name = name;
 	}
 	

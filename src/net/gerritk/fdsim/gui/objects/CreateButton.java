@@ -39,13 +39,15 @@ public class CreateButton extends Button {
 		
 		g.drawString(getName(), (int) getX() + 2, (int) getY() + sh - 1);
 		
-		g.setFont(SimFont.TEXT_CREATE_COUNT);
-		g.drawString("" + getCount(), (int) getX() + (30 - StringUtil.getWidth("" + getCount(), g)) / 2, (int) getY() + sh + StringUtil.getHeight("" + getCount(), g) - 1);
+		if(getCount() >= 0) {
+			g.setFont(SimFont.TEXT_CREATE_COUNT);
+			g.drawString("" + getCount(), (int) getX() + (30 - StringUtil.getWidth("" + getCount(), g)) / 2, (int) getY() + sh + StringUtil.getHeight("" + getCount(), g) - 1);
+		}
 	}
 	
 	@Override
 	public void press(int btn) {
-		if(getCount() <= 0) return;
+		if(getCount() <= 0 && getCount() != -1) return;
 		
 		super.press(btn);
 	}

@@ -6,7 +6,7 @@ import net.gerritk.fdsim.lights.*;
 import net.gerritk.fdsim.resource.SimImage;
 
 public class TSFW extends Vehicle {
-	public Bluelight bluelight[];
+	private Bluelight bluelight[];
 	
 	public TSFW(String name, int x, int y, Playground playground) {
 		super(name, x, y, SimImage.VEH_TSFW, playground);
