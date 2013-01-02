@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.swing.*;
 
 import net.gerritk.fdsim.entities.Entity;
+import net.gerritk.fdsim.entities.Vehicle;
 import net.gerritk.fdsim.gui.Button;
 import net.gerritk.fdsim.gui.PopupMenu;
 import net.gerritk.fdsim.gui.objects.*;
@@ -116,6 +117,10 @@ public class Simulation extends JPanel implements Runnable {
 	}
 	
 	public void drawGUI(ExGraphics g) {
+		if(playground != null) {
+			playground.drawGUI(g);
+		}
+		
 		if(popupMenu != null) {
 			popupMenu.drawGUI(g);
 		}
@@ -339,12 +344,16 @@ public class Simulation extends JPanel implements Runnable {
 		public void mouseReleased(MouseEvent e) {
 			if(e.getButton() != MouseEvent.NOBUTTON) {
 				mousebutton[e.getButton() - 1] = false;
-				popupMenu = null;
+				
+				if(popupMenu != null && !popupMenu.contains(mouse)) {
+					popupMenu = null;
+				}
 			}
 			
 			if(e.getButton() == MouseEvent.BUTTON3 && playground.getSelectedEntity() != null) {
-				popupMenu = new PopupMenu(e.getX() + 5, e.getY(), 100, 64, null); // TODO
-				popupMenu.setTitle(playground.getSelectedEntity().getName());
+				Vehicle v = (Vehicle) playground.getSelectedEntity();
+				popupMenu = new VehiclePopup(e.getX() + 5, e.getY(), 100, 64, v, null); // TODO
+				popupMenu.setTitle(v.getName());
 			}
 		}
 		

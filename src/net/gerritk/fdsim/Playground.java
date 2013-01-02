@@ -7,10 +7,11 @@ import java.util.ArrayList;
 
 import net.gerritk.fdsim.entities.*;
 import net.gerritk.fdsim.entities.vehicles.*;
+import net.gerritk.fdsim.interfaces.*;
 import net.gerritk.util.ExGraphics;
 import net.gerritk.util.StringUtil;
 
-public class Playground {
+public class Playground implements Drawable, DrawableGUI, Updateable {
 	private static int lastID;
 	
 	private int id;
@@ -70,12 +71,14 @@ public class Playground {
 		}
 	}
 	
+	@Override
 	public void update(long delta) {
 		for(Entity e : entities) {
 			e.update(delta);
 		}
 	}
 	
+	@Override
 	public void draw(ExGraphics g) {
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRoundRect(offsetX + 1, offsetY - 15, StringUtil.getWidth(getTitle(), g) + 11, 20, 8, 8);
@@ -100,6 +103,19 @@ public class Playground {
 		
 		g.setColor(Color.GRAY);
 		g.drawRect(offsetX, offsetY, size.width - 1, size.height - 1);
+	}
+	
+	@Override
+	public void drawGUI(ExGraphics g) {
+		for(Entity e : entities) {
+			if(e != getSelectedEntity()) {
+				e.drawGUI(g);
+			}
+		}
+		
+		if(getSelectedEntity() != null) {
+			getSelectedEntity().drawGUI(g);
+		}
 	}
 	
 	public void goStart() {

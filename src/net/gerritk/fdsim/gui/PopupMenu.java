@@ -15,21 +15,21 @@ public class PopupMenu extends InterfaceObject {
 	
 	@Override
 	public void drawGUI(ExGraphics g) {
-		if(isVisible()) {
-			if(getTitle() != null) {
-				g.setColor(SimColor.GUI_POPUP);
-				g.fillRoundRect((int) getX(), (int) getY() - StringUtil.getHeight(getTitle(), g), StringUtil.getWidth(getTitle(), g) + 10, StringUtil.getHeight(getTitle(), g) + 5, 8, 8);
-				g.setColor(SimColor.GUI_POPUP_BORDER);
-				g.drawRoundRect((int) getX(), (int) getY() - StringUtil.getHeight(getTitle(), g), StringUtil.getWidth(getTitle(), g) + 9, StringUtil.getHeight(getTitle(), g) + 5, 8, 8);
-				g.setColor(SimColor.GUI_POPUP_TEXT);
-				g.drawString(getTitle(), (int) getX() + 5, (int) getY() - 3);
-			}
-			
+		if(!isVisible()) return;
+	
+		if(getTitle() != null) {
 			g.setColor(SimColor.GUI_POPUP);
-			g.fillRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight());
+			g.fillRoundRect((int) getX(), (int) getY() - StringUtil.getHeight(getTitle(), g), StringUtil.getWidth(getTitle(), g) + 10, StringUtil.getHeight(getTitle(), g) + 5, 8, 8);
 			g.setColor(SimColor.GUI_POPUP_BORDER);
-			g.drawRect((int) getX(), (int) getY(), (int) getWidth() - 1, (int) getHeight() - 1);
+			g.drawRoundRect((int) getX(), (int) getY() - StringUtil.getHeight(getTitle(), g), StringUtil.getWidth(getTitle(), g) + 9, StringUtil.getHeight(getTitle(), g) + 5, 8, 8);
+			g.setColor(SimColor.GUI_POPUP_TEXT);
+			g.drawString(getTitle(), (int) getX() + 5, (int) getY() - 3);
 		}
+		
+		g.setColor(SimColor.GUI_POPUP);
+		g.fillRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight());
+		g.setColor(SimColor.GUI_POPUP_BORDER);
+		g.drawRect((int) getX(), (int) getY(), (int) getWidth() - 1, (int) getHeight() - 1);
 	}
 	
 	@Override
