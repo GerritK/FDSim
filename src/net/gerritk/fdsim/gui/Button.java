@@ -43,7 +43,7 @@ public class Button extends InterfaceObject {
 	}
 	
 	@Override
-	public void draw(ExGraphics g) {
+	public void drawGUI(ExGraphics g) {
 		if(!isVisible()) return;
 		
 		if(isHover()) {
@@ -74,7 +74,7 @@ public class Button extends InterfaceObject {
 		}
 		
 		if(hover && tip != null && System.currentTimeMillis() - Simulation.getMouseHandler().lastMoved > 1000) {
-			tip.draw(g);
+			tip.drawGUI(g);
 		}
 	}
 	

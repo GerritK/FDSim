@@ -14,7 +14,7 @@ public class PopupMenu extends InterfaceObject {
 	}
 	
 	@Override
-	public void draw(ExGraphics g) {
+	public void drawGUI(ExGraphics g) {
 		if(isVisible()) {
 			if(getTitle() != null) {
 				g.setColor(SimColor.GUI_POPUP);

@@ -58,7 +58,7 @@ public class BottomBar extends Bar {
 	}
 
 	@Override
-	public void draw(ExGraphics g) {
+	public void drawGUI(ExGraphics g) {
 		if(!isVisible()) return;
 		
 		g.setColor(SimColor.GUI_BG);
@@ -85,9 +85,9 @@ public class BottomBar extends Bar {
 		g.drawString(m, (int) (getX() + getWidth()) - 120, (int) (getY() + getHeight()) - 3);
 		
 		// GUI
-		btnPause.draw(g);
-		btnReset.draw(g);
-		btnName.draw(g);
+		btnPause.drawGUI(g);
+		btnReset.drawGUI(g);
+		btnName.drawGUI(g);
 	}
 	
 	/*

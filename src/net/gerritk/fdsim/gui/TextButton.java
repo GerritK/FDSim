@@ -25,10 +25,10 @@ public class TextButton extends Button {
 	}
 
 	@Override
-	public void draw(ExGraphics g) {
+	public void drawGUI(ExGraphics g) {
 		if(!isVisible()) return;
 		
-		super.draw(g);
+		super.drawGUI(g);
 		
 		g.setFont(getFont());		
 		g.setColor(getColorText());

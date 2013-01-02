@@ -24,10 +24,10 @@ public class CreateButton extends Button {
 	}
 	
 	@Override
-	public void draw(ExGraphics g) {
+	public void drawGUI(ExGraphics g) {
 		if(!isVisible()) return;
 		
-		super.draw(g);
+		super.drawGUI(g);
 		
 		g.setFont(SimFont.TEXT_CREATE);
 		int sh = StringUtil.getHeight(getName(), g);

@@ -18,7 +18,7 @@ public class ToolTip extends InterfaceObject {
 	}
 	
 	@Override
-	public void draw(ExGraphics g) {
+	public void drawGUI(ExGraphics g) {
 		g.setFont(new Font("Verdana", Font.PLAIN, 12));
 		
 		setWidth(StringUtil.getWidth(getTip(), g));

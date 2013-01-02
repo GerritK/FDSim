@@ -48,7 +48,7 @@ public class CreateBar extends Bar {
 	}
 	
 	@Override
-	public void draw(ExGraphics g) {
+	public void drawGUI(ExGraphics g) {
 		g.setColor(SimColor.GUI_BG);
 		g.setAlpha(0.6f);
 		g.fillRoundRect((int) getX() - 4, (int) getY(), (int) getWidth() + 4, Simulation.getInstance().getHeight() - (int) getY() * 2, 8, 8);
@@ -57,10 +57,10 @@ public class CreateBar extends Bar {
 		g.drawRoundRect((int) getX() - 4, (int) getY(), (int) getWidth() + 3, Simulation.getInstance().getHeight() - (int) getY() * 2 - 1, 8, 8);
 		g.drawLine((int) (getX() + getWidth()) - 8, (int) getY(), (int) (getX() + getWidth()) - 8, (int) (getHeight()) - 1);
 		
-		btnToggle.draw(g);
+		btnToggle.drawGUI(g);
 		
 		for(CreateButton b : create) {
-			b.draw(g);
+			b.drawGUI(g);
 		}
 	}
 	

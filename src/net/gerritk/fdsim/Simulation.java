@@ -113,14 +113,15 @@ public class Simulation extends JPanel implements Runnable {
 		if(playground != null) {
 			playground.draw(g);
 		}
-		
-		// GUI
+	}
+	
+	public void drawGUI(ExGraphics g) {
 		if(popupMenu != null) {
-			popupMenu.draw(g);
+			popupMenu.drawGUI(g);
 		}
 		
-		bottomBar.draw(g);
-		createBar.draw(g);
+		bottomBar.drawGUI(g);
+		createBar.drawGUI(g);
 		
 		if(isPaused()) {
 			String paused = "Pausiert";
@@ -178,6 +179,7 @@ public class Simulation extends JPanel implements Runnable {
 		ExGraphics g = new ExGraphics((Graphics2D) gra);
 		g.setRenderingHints(renderMap);
 		draw(g);
+		drawGUI(g);
 	}
 	
 	/*

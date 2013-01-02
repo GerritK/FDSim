@@ -21,10 +21,10 @@ public class IconButton extends Button {
 	}
 
 	@Override
-	public void draw(ExGraphics g) {
+	public void drawGUI(ExGraphics g) {
 		if(!isVisible()) return;
 		
-		super.draw(g);
+		super.drawGUI(g);
 		
 		g.drawImage(getImage(), (int) (getX() + (getWidth() - getImage().getWidth()) / 2), (int) (getY() + (getHeight() - getImage().getHeight()) / 2), null);
 	}

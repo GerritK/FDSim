@@ -17,7 +17,7 @@ import net.gerritk.util.ExGraphics;
 import net.gerritk.util.MathUtil;
 import net.gerritk.util.StringUtil;
 
-public abstract class Entity implements Drawable, Updateable {
+public abstract class Entity implements Drawable, DrawableGUI, Updateable {
 	protected static final int BORDER = 2;
 	
 	private String name;
@@ -69,7 +69,9 @@ public abstract class Entity implements Drawable, Updateable {
 		}
 		
 		g.setTransform(af);
-		
+	}
+	
+	public void drawGUI(ExGraphics g) {
 		if(Simulation.showNames()) {			
 			int hy = MathUtil.getHeighestPoint(getCollision(), MathUtil.TOP).y + playground.getOffsetY();
 			

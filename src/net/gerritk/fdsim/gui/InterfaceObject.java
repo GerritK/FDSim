@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 
 import net.gerritk.fdsim.interfaces.*;
 
-public abstract class InterfaceObject extends Rectangle implements Drawable, Updateable {	
+public abstract class InterfaceObject extends Rectangle implements DrawableGUI, Updateable {	
 	private static final long serialVersionUID = -4343835306838898044L;
 	
 	private InterfaceObject ref;
