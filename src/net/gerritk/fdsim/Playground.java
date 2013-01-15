@@ -1,15 +1,12 @@
 package net.gerritk.fdsim;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
+import java.awt.*;
 import java.util.ArrayList;
 
 import net.gerritk.fdsim.entities.*;
 import net.gerritk.fdsim.entities.vehicles.*;
 import net.gerritk.fdsim.interfaces.*;
-import net.gerritk.util.ExGraphics;
-import net.gerritk.util.StringUtil;
+import net.gerritk.util.*;
 
 public class Playground implements Drawable, DrawableGUI, Updateable {
 	private static int lastID;
@@ -93,12 +90,14 @@ public class Playground implements Drawable, DrawableGUI, Updateable {
 		for(Entity e : entities) {
 			if(e != getSelectedEntity()) {
 				e.draw(g);
+				g.resetTransform();
 			}
 		}
 		
 		// Selected always on top!
 		if(getSelectedEntity() != null) {
 			getSelectedEntity().draw(g);
+			g.resetTransform();
 		}
 		
 		g.setColor(Color.GRAY);

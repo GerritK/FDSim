@@ -3,15 +3,12 @@ package net.gerritk.fdsim.entities;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Polygon;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 import net.gerritk.fdsim.Playground;
 import net.gerritk.fdsim.Simulation;
 import net.gerritk.fdsim.interfaces.*;
-import net.gerritk.fdsim.lights.Light;
 import net.gerritk.fdsim.resource.SimColor;
 import net.gerritk.util.ExGraphics;
 import net.gerritk.util.MathUtil;
@@ -25,7 +22,6 @@ public abstract class Entity implements Drawable, DrawableGUI, Updateable {
 	private BufferedImage img;
 	private Playground playground;
 	private double rotation;
-	private ArrayList<Light> lights = new ArrayList<Light>();
 	
 	public Entity(String name, int x, int y, BufferedImage img, Playground playground) {
 		
@@ -37,15 +33,7 @@ public abstract class Entity implements Drawable, DrawableGUI, Updateable {
 	}
 	
 	@Override
-	public void update(long delta) {
-		for(Light l : lights) {
-			l.update(delta);
-		}
-	}
-	
-	@Override
 	public void draw(ExGraphics g) {
-		AffineTransform af = g.getTransform();
 		g.rotate(Math.toRadians(- getRotation()), getScreenX() + getImage().getWidth() / 2 + 1, getScreenY() + getImage().getHeight() / 2 + 1);
 		
 		if(isSelected()) {			
@@ -63,12 +51,6 @@ public abstract class Entity implements Drawable, DrawableGUI, Updateable {
 		}
 		
 		g.drawImage(getImage(), getScreenX(), getScreenY(), null);
-		
-		for(Light l : lights) {
-			l.draw(g);
-		}
-		
-		g.setTransform(af);
 	}
 	
 	public void drawGUI(ExGraphics g) {
@@ -242,15 +224,5 @@ public abstract class Entity implements Drawable, DrawableGUI, Updateable {
 		poly.addPoint(getX() + getImage().getWidth() / 2 + (int) (Math.sin(rot - alpha) * hypo), getY() + getImage().getHeight() / 2 + (int) (Math.cos(rot - alpha) * hypo));
 		
 		return poly;
-	}
-	
-	protected void addLight(Light light) {
-		lights.add(light);
-	}
-	
-	protected void addLights(Light lights[]) {
-		for(Light l : lights) {
-			this.lights.add(l);
-		}
 	}
 }
