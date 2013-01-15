@@ -85,7 +85,7 @@ public class Playground implements Drawable, DrawableGUI, Updateable {
 		g.setColor(Color.GRAY);
 		g.drawRoundRect(offsetX, offsetY - 15, StringUtil.getWidth(getTitle(), g) + 12, 21, 8, 8);
 		g.setColor(Color.BLACK);
-		g.drawString(getTitle(), offsetX + 7, offsetY - 2);
+		g.drawString(getTitle(), offsetX + 7, offsetY - 3);
 		
 		g.setColor(SimColor.PLAYGROUND);
 		g.fillRect(offsetX, offsetY, size.width, size.height);
@@ -115,6 +115,7 @@ public class Playground implements Drawable, DrawableGUI, Updateable {
 			}
 		}
 		
+		// Selected always on top!
 		if(getSelectedEntity() != null) {
 			getSelectedEntity().drawGUI(g);
 		}

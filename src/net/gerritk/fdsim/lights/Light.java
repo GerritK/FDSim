@@ -7,7 +7,7 @@ import net.gerritk.fdsim.interfaces.*;
 import net.gerritk.util.ExGraphics;
 
 public class Light implements Drawable, Updateable {
-	public static final int TYPE_BLUELIGHT = 0, UNDEFINED = -1;
+	public static final int TYPE_BLUELIGHT = 0, UNDEFINED = -1, HEADLIGHT = 1;
 	
 	private int x;
 	private int y;

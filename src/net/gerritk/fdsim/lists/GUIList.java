@@ -1,4 +1,4 @@
-package net.gerritk.fdsim.gui.lists;
+package net.gerritk.fdsim.lists;
 
 import java.awt.Point;
 import java.util.ArrayList;

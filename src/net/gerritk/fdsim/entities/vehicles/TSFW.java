@@ -12,11 +12,11 @@ public class TSFW extends SquadVehicle {
 		
 		Light l;
 		
-		l = new Light(6, -8, SimImage.LIGHT_1, -1, this);
+		l = new Light(6, -8, SimImage.LIGHT_1, Light.HEADLIGHT, this);
 		l.setEnabled(true);
 		addLight(l);
 		
-		l = new Light(35, -8, SimImage.LIGHT_1, -1, this);
+		l = new Light(35, -8, SimImage.LIGHT_1, Light.HEADLIGHT, this);
 		l.setEnabled(true);
 		addLight(l);
 		
