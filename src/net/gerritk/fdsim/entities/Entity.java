@@ -77,6 +77,8 @@ public abstract class Entity implements Drawable, DrawableGUI, Updateable {
 			g.setAlpha(0.6f);
 			g.fillPolygon(xp, yp, xp.length);
 			g.setAlpha(1);
+			g.setColor(SimColor.GUI_BORDER);
+			g.drawPolygon(xp, yp, xp.length);
 		}
 	}
 	

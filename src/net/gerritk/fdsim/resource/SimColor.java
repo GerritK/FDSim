@@ -7,7 +7,8 @@ public abstract class SimColor {
 	public static final Color DARK_GRAY = new Color(33, 33, 33),
 			FIRE_RED = new Color(204, 0, 0),
 			BLUE = new Color(0, 72, 153),
-			OCEAN_BLUE = new Color(3, 50, 108);
+			OCEAN_BLUE = new Color(3, 50, 108),
+			LIGHT_GRAY = new Color(230, 230, 230);
 	
 	// Associated Colors
 	public static final Color GUI_BG = OCEAN_BLUE,
@@ -23,5 +24,6 @@ public abstract class SimColor {
 			GUI_POPUP_BORDER = Color.GRAY,
 			GUI_POPUP_TEXT = Color.BLACK,
 			
-			VOID = DARK_GRAY;
+			VOID = DARK_GRAY,
+			PLAYGROUND = LIGHT_GRAY;
 }
