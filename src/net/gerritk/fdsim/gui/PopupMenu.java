@@ -1,6 +1,7 @@
 package net.gerritk.fdsim.gui;
 
 import net.gerritk.fdsim.resource.SimColor;
+import net.gerritk.fdsim.resource.SimFont;
 import net.gerritk.util.ExGraphics;
 import net.gerritk.util.StringUtil;
 
@@ -16,14 +17,16 @@ public class PopupMenu extends InterfaceObject {
 	@Override
 	public void drawGUI(ExGraphics g) {
 		if(!isVisible()) return;
-	
+		
 		if(getTitle() != null) {
+			g.setFont(SimFont.HEADING);
+			
 			g.setColor(SimColor.GUI_POPUP);
 			g.fillRoundRect((int) getX(), (int) getY() - StringUtil.getHeight(getTitle(), g), StringUtil.getWidth(getTitle(), g) + 10, StringUtil.getHeight(getTitle(), g) + 5, 8, 8);
 			g.setColor(SimColor.GUI_POPUP_BORDER);
 			g.drawRoundRect((int) getX(), (int) getY() - StringUtil.getHeight(getTitle(), g), StringUtil.getWidth(getTitle(), g) + 9, StringUtil.getHeight(getTitle(), g) + 5, 8, 8);
 			g.setColor(SimColor.GUI_POPUP_TEXT);
-			g.drawString(getTitle(), (int) getX() + 5, (int) getY() - 3);
+			g.drawString(getTitle(), (int) getX() + 5, (int) getY() - 2);
 		}
 		
 		g.setColor(SimColor.GUI_POPUP);

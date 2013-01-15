@@ -14,14 +14,15 @@ public class VehiclePopupHandler extends ButtonHandler<VehiclePopup> {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		String cmd = e.getActionCommand();
 		Vehicle v = getInstance().getVehicle();
 		
-		if(e.getActionCommand().equals("toggleBluelight")) {			
+		if(cmd.equals("toggleBluelight")) {			
 			if(v instanceof SquadVehicle) {
 				SquadVehicle sv = (SquadVehicle) v;
 				sv.setBluelightEnabled(!sv.isBluelightEnabled());
 			}
-		} else if(e.getActionCommand().equals("toggleLight")) {
+		} else if(cmd.equals("toggleLight")) {
 			v.setLightEnabled(!v.isLightEnabled());
 		}
 	}

@@ -11,7 +11,8 @@ public class SimFont {
 			PAUSED_BIG = new Font("Verdana", Font.BOLD, 24),
 			PAUSED_SMALL = new Font("Verdana", Font.ITALIC, 14),
 			TEXT_CREATE = new Font("Verdana", Font.PLAIN, 8),
-			TEXT_CREATE_COUNT = new Font("Verdana", Font.BOLD, 18);
+			TEXT_CREATE_COUNT = new Font("Verdana", Font.BOLD, 18),
+			HEADING = new Font("Verdana", Font.PLAIN, 10);
 	
 	// Own Fonts
 	public static final OwnFont CLOCK = new OwnFont("DS-DIGIT.TTF", Font.TRUETYPE_FONT);

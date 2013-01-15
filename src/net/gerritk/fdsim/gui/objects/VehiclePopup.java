@@ -28,7 +28,7 @@ public class VehiclePopup extends PopupMenu {
 		btnBluelight.addActionListener(handler);
 		Simulation.buttons.add(btnBluelight);
 		
-		btnLight = new IconButton(SimImage.LIGHT_BLUE_1, 18, 2, 14, 14, this);
+		btnLight = new IconButton(SimImage.LIGHT_1, 18, 2, 14, 14, this);
 		btnLight.setToolTip("Abblendlicht an-/ausschalten");
 		btnLight.setActionCommand("toggleLight");
 		btnLight.addActionListener(handler);

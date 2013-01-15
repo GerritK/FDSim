@@ -25,5 +25,6 @@ public abstract class SimImage {
 	/*
 	 * Light Images
 	 */
-	public static final BufferedImage LIGHT_BLUE_1 = ImageUtil.loadImage("images/lights/blue_1.png");
+	public static final BufferedImage LIGHT_BLUE_1 = ImageUtil.loadImage("images/lights/blue_1.png"),
+			LIGHT_1 = ImageUtil.loadImage("images/lights/light_1.png");
 }

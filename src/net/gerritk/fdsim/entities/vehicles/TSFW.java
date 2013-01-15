@@ -10,6 +10,17 @@ public class TSFW extends SquadVehicle {
 	public TSFW(String name, int x, int y, Playground playground) {
 		super(name, x, y, SimImage.VEH_TSFW, playground);
 		
+		Light l;
+		
+		l = new Light(6, -8, SimImage.LIGHT_1, -1, this);
+		l.setEnabled(true);
+		addLight(l);
+		
+		l = new Light(35, -8, SimImage.LIGHT_1, -1, this);
+		l.setEnabled(true);
+		addLight(l);
+		
+		// Bluelight
 		Bluelight bluelight[] = new Bluelight[4];
 		
 		bluelight[0] = new Bluelight(8, 21, SimImage.LIGHT_BLUE_1, 10, 90, 5, this);

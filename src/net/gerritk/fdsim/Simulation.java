@@ -13,7 +13,9 @@ import javax.swing.*;
 import net.gerritk.fdsim.entities.Entity;
 import net.gerritk.fdsim.entities.Vehicle;
 import net.gerritk.fdsim.gui.Button;
+import net.gerritk.fdsim.gui.InterfaceObject;
 import net.gerritk.fdsim.gui.PopupMenu;
+import net.gerritk.fdsim.gui.lists.GUIList;
 import net.gerritk.fdsim.gui.objects.*;
 import net.gerritk.fdsim.resource.SimColor;
 import net.gerritk.fdsim.resource.SimFont;
@@ -42,6 +44,7 @@ public class Simulation extends JPanel implements Runnable {
 	
 	// GUI
 	public static ArrayList<Button> buttons = new ArrayList<Button>();
+	public static GUIList<InterfaceObject> guiObjects = new GUIList<InterfaceObject>(); 
 	private static BottomBar bottomBar;
 	private static CreateBar createBar;
 	private static PopupMenu popupMenu;
@@ -72,7 +75,10 @@ public class Simulation extends JPanel implements Runnable {
 		
 		// GUI
 		bottomBar = new BottomBar(0, 30);
+		guiObjects.add(bottomBar);
+		
 		createBar = new CreateBar(0, 100);
+		guiObjects.add(createBar);
 		
 		frame = new JFrame("Feuerwehr Planspiel Simulation " + VERSION);
 		frame.addKeyListener(keyHandler);
@@ -121,12 +127,12 @@ public class Simulation extends JPanel implements Runnable {
 			playground.drawGUI(g);
 		}
 		
+		bottomBar.drawGUI(g);
+		createBar.drawGUI(g);
+		
 		if(popupMenu != null) {
 			popupMenu.drawGUI(g);
 		}
-		
-		bottomBar.drawGUI(g);
-		createBar.drawGUI(g);
 		
 		if(isPaused()) {
 			String paused = "Pausiert";
@@ -155,7 +161,7 @@ public class Simulation extends JPanel implements Runnable {
 		long delta = 0;
 		
 		// TODO PLAYGROUND
-		playground = new Playground("Wohnhausbrand Siekgraben", new Dimension(800, 800), new Point(100, 200), TimeUtil.getTimeInMillis(13, 49, 32, 0));
+		playground = new Playground("Wohnhausbrand Siekgraben", new Dimension(800, 800), new Point(100, 200), TimeUtil.getTimeInMillis(23, 59, 32, 0));
 		
 		while(frame.isVisible()) {
 			// Calculate Delta
@@ -308,7 +314,7 @@ public class Simulation extends JPanel implements Runnable {
 					}
 				}
 			
-				if(e.getButton() != MouseEvent.NOBUTTON && !createBar.contains(mouse) && !bottomBar.contains(mouse)) {
+				if(e.getButton() != MouseEvent.NOBUTTON && guiObjects.contains(mouse) == null) {
 					mousebutton[e.getButton() - 1] = true;
 					
 					if(mousebutton[0] && !isPaused() && !keyHandler.keyControl) {
@@ -346,6 +352,7 @@ public class Simulation extends JPanel implements Runnable {
 				mousebutton[e.getButton() - 1] = false;
 				
 				if(popupMenu != null && !popupMenu.contains(mouse)) {
+					guiObjects.remove(popupMenu);
 					popupMenu = null;
 				}
 			}
@@ -354,6 +361,7 @@ public class Simulation extends JPanel implements Runnable {
 				Vehicle v = (Vehicle) playground.getSelectedEntity();
 				popupMenu = new VehiclePopup(e.getX() + 5, e.getY(), 100, 64, v, null); // TODO
 				popupMenu.setTitle(v.getName());
+				guiObjects.add(popupMenu);
 			}
 		}
 		

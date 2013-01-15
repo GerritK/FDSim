@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import net.gerritk.fdsim.entities.*;
 import net.gerritk.fdsim.entities.vehicles.*;
 import net.gerritk.fdsim.interfaces.*;
+import net.gerritk.fdsim.resource.SimFont;
 import net.gerritk.util.*;
 
 public class Playground implements Drawable, DrawableGUI, Updateable {
@@ -15,6 +16,7 @@ public class Playground implements Drawable, DrawableGUI, Updateable {
 	private String title;
 	private ArrayList<Entity> entities;
 	private long startTime;
+	private Color timeColor;
 	
 	private Dimension size;
 	private int offsetX, offsetY;
@@ -70,6 +72,13 @@ public class Playground implements Drawable, DrawableGUI, Updateable {
 	
 	@Override
 	public void update(long delta) {
+		int c = (int) Math.abs(TimeUtil.getMillisInFullHours(Simulation.getSimulationTime(true)));
+		if(c > 12) {
+			c = 12 - (c - 12);
+		}
+		
+		timeColor = new Color(87 + c * 14, 87 + c * 14, 87 + c * 14);
+		
 		for(Entity e : entities) {
 			e.update(delta);
 		}
@@ -77,6 +86,7 @@ public class Playground implements Drawable, DrawableGUI, Updateable {
 	
 	@Override
 	public void draw(ExGraphics g) {
+		g.setFont(SimFont.HEADING);
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRoundRect(offsetX + 1, offsetY - 15, StringUtil.getWidth(getTitle(), g) + 11, 20, 8, 8);
 		g.setColor(Color.GRAY);
@@ -84,7 +94,7 @@ public class Playground implements Drawable, DrawableGUI, Updateable {
 		g.setColor(Color.BLACK);
 		g.drawString(getTitle(), offsetX + 7, offsetY - 2);
 		
-		g.setColor(Color.WHITE);
+		g.setColor(timeColor);
 		g.fillRect(offsetX, offsetY, size.width, size.height);
 		
 		for(Entity e : entities) {
