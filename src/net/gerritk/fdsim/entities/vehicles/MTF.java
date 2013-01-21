@@ -12,10 +12,10 @@ public class MTF extends SquadVehicle {
 		
 		Light l;
 		
-		l = new Light(4, -8, SimImage.LIGHT_1, -1, this);
+		l = new Light(4, -8, SimImage.LIGHT_1, Light.HEADLIGHT, this);
 		addLight(l);
 		
-		l = new Light(33, -8, SimImage.LIGHT_1, -1, this);
+		l = new Light(33, -8, SimImage.LIGHT_1, Light.HEADLIGHT, this);
 		addLight(l);
 		
 		// Bluelight
