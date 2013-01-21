@@ -34,19 +34,11 @@ public abstract class Vehicle extends Entity {
 	 * Getter & Setter
 	 */
 	public boolean isHeadlightEnabled() {
-		LightList<Light> ll = lights.getByType(Light.HEADLIGHT);
-		
-		if(ll.size() <= 0) return false;
-		
-		return ll.get(0).isEnabled();
+		return isLightEnabled(Light.HEADLIGHT);
 	}
 
-	public void setHeadlightEnabled(boolean lightEnabled) {
-		LightList<Light> ll = lights.getByType(Light.HEADLIGHT);
-		
-		for(Light l : ll) {
-			l.setEnabled(lightEnabled);
-		}
+	public void setHeadlightEnabled(boolean enabled) {
+		setLightEnabled(enabled, Light.HEADLIGHT);
 	}
 	
 	public boolean isLightEnabled(int type) {
