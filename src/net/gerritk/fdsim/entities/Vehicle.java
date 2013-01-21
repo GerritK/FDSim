@@ -33,16 +33,6 @@ public abstract class Vehicle extends Entity {
 	/*
 	 * Getter & Setter
 	 */
-	protected void addLight(Light light) {
-		lights.add(light);
-	}
-	
-	protected void addLights(Light lights[]) {
-		for(Light l : lights) {
-			this.lights.add(l);
-		}
-	}
-
 	public boolean isLightEnabled() {
 		Light ll[] = lights.getLightsByType(Light.HEADLIGHT);
 		
@@ -56,6 +46,16 @@ public abstract class Vehicle extends Entity {
 		
 		for(Light l : ll) {
 			l.setEnabled(lightEnabled);
+		}
+	}	
+	
+	protected void addLight(Light light) {
+		lights.add(light);
+	}
+	
+	protected void addLights(Light lights[]) {
+		for(Light l : lights) {
+			this.lights.add(l);
 		}
 	}
 }
