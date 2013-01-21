@@ -13,7 +13,7 @@ public class Bluelight extends Light {
 	private boolean flash;
 	
 	public Bluelight(int x, int y, BufferedImage img, int frequence, int pause, int delay, Entity reference) {
-		super(x, y, img, Light.TYPE_BLUELIGHT, reference);
+		super(x, y, img, Light.BLUELIGHT, reference);
 		setFrequence(frequence);
 		setPause(pause);
 		setDelay(delay);

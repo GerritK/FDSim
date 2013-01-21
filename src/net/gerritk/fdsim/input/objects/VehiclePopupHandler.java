@@ -23,7 +23,7 @@ public class VehiclePopupHandler extends ButtonHandler<VehiclePopup> {
 				sv.setBluelightEnabled(!sv.isBluelightEnabled());
 			}
 		} else if(cmd.equals("toggleLight")) {
-			v.setLightEnabled(!v.isLightEnabled());
+			v.setHeadlightEnabled(!v.isHeadlightEnabled());
 		}
 	}
 }

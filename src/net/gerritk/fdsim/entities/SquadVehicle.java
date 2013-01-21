@@ -3,13 +3,11 @@ package net.gerritk.fdsim.entities;
 import java.awt.image.BufferedImage;
 
 import net.gerritk.fdsim.Playground;
-import net.gerritk.fdsim.lights.Bluelight;
+import net.gerritk.fdsim.lights.Light;
+import net.gerritk.fdsim.lists.LightList;
 import net.gerritk.util.ExGraphics;
 
-public class SquadVehicle extends Vehicle {
-	private Bluelight bluelights[];
-	private boolean bluelightEnabled;
-	
+public class SquadVehicle extends Vehicle {	
 	public SquadVehicle(String name, int x, int y, BufferedImage img, Playground playground) {
 		super(name, x, y, img, playground);
 	}
@@ -17,41 +15,29 @@ public class SquadVehicle extends Vehicle {
 	@Override
 	public void update(long delta) {
 		super.update(delta);
-		
-		if(isBluelightEnabled()) {
-			for(Bluelight bl : bluelights) {
-				bl.update(delta);
-			}
-		}
 	}
 	
 	@Override
 	public void draw(ExGraphics g) {
 		super.draw(g);
-		
-		if(isBluelightEnabled()) {
-			for(Bluelight bl : bluelights) {
-				bl.draw(g);
-			}
-		}
 	}
 	
 	/*
 	 * Getter & Setter
 	 */
 	public void setBluelightEnabled(boolean enabled) {
-		this.bluelightEnabled = enabled;
+		LightList<Light> bl = getLights().getByType(Light.BLUELIGHT);
+		
+		for(Light b : bl) {
+			b.setEnabled(enabled);
+		}
 	}
 	
 	public boolean isBluelightEnabled() {
-		return bluelightEnabled;
+		return isLightEnabled(Light.BLUELIGHT);
 	}
 	
-	public Bluelight[] getBluelights() {
-		return bluelights;
-	}
-
-	public void setBluelights(Bluelight bluelights[]) {
-		this.bluelights = bluelights;
+	public LightList<Light> getBluelights() {
+		return getLights().getByType(Light.BLUELIGHT);
 	}
 }

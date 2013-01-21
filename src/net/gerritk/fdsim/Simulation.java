@@ -24,7 +24,7 @@ import net.gerritk.util.*;
 public class Simulation extends JPanel implements Runnable {
 	private static final long serialVersionUID = 3904671781449439735L;
 	
-	public static final String VERSION = "0.0.1 DEV", COPY = "(c) 2012 - K.Design - Gerrit Kaul - Feuerwehr Braunschweig";
+	public static final String VERSION = "0.0.2 DEV", COPY = "(c) 2012 - K.Design - Gerrit Kaul - Feuerwehr Braunschweig";
 	public static final int MODE_HOST = 0, MODE_USER = 1;
 	
 	private static Simulation instance;
@@ -37,6 +37,7 @@ public class Simulation extends JPanel implements Runnable {
 	private static int mode;
 	private static boolean paused;
 	
+	// IO Handlers
 	private static KeyHandler keyHandler;
 	private static MouseHandler mouseHandler;
 	private static ButtonHandler buttonHandler;

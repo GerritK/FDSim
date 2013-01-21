@@ -33,29 +33,51 @@ public abstract class Vehicle extends Entity {
 	/*
 	 * Getter & Setter
 	 */
-	public boolean isLightEnabled() {
-		Light ll[] = lights.getLightsByType(Light.HEADLIGHT);
+	public boolean isHeadlightEnabled() {
+		LightList<Light> ll = lights.getByType(Light.HEADLIGHT);
 		
-		if(ll.length <= 0) return false;
+		if(ll.size() <= 0) return false;
 		
-		return ll[0].isEnabled();
+		return ll.get(0).isEnabled();
 	}
 
-	public void setLightEnabled(boolean lightEnabled) {
-		Light ll[] = lights.getLightsByType(Light.HEADLIGHT);
+	public void setHeadlightEnabled(boolean lightEnabled) {
+		LightList<Light> ll = lights.getByType(Light.HEADLIGHT);
 		
 		for(Light l : ll) {
 			l.setEnabled(lightEnabled);
 		}
-	}	
+	}
+	
+	public boolean isLightEnabled(int type) {
+		LightList<Light> ll = lights.getByType(type);
+		
+		if(ll.size() <= 0) return false;
+		
+		return ll.get(0).isEnabled();
+	}
+
+	public void setLightEnabled(boolean enabled, int type) {
+		LightList<Light> ll = lights.getByType(type);
+		
+		for(Light l : ll) {
+			l.setEnabled(enabled);
+		}
+	}
 	
 	protected void addLight(Light light) {
 		lights.add(light);
+		
+		light.setEnabled(isLightEnabled(light.getType()));
 	}
 	
 	protected void addLights(Light lights[]) {
 		for(Light l : lights) {
 			this.lights.add(l);
 		}
+	}
+	
+	protected LightList<Light> getLights() {
+		return lights;
 	}
 }

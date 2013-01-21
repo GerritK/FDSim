@@ -13,25 +13,21 @@ public class MTF extends SquadVehicle {
 		Light l;
 		
 		l = new Light(4, -8, SimImage.LIGHT_1, -1, this);
-		l.setEnabled(true);
 		addLight(l);
 		
 		l = new Light(33, -8, SimImage.LIGHT_1, -1, this);
-		l.setEnabled(true);
 		addLight(l);
 		
 		// Bluelight
-		Bluelight bluelights[] = new Bluelight[3];
+		Bluelight bluelight;
 		
-		bluelights[0] = new Bluelight(6, 21, SimImage.LIGHT_BLUE_1, 10, 50, 3, this);
-		bluelights[0].setEnabled(true);
+		bluelight = new Bluelight(6, 21, SimImage.LIGHT_BLUE_1, 10, 50, 3, this);
+		addLight(bluelight);
 		
-		bluelights[1] = new Bluelight(31, 21, SimImage.LIGHT_BLUE_1, 8, 51, 1, this);
-		bluelights[1].setEnabled(true);
+		bluelight = new Bluelight(31, 21, SimImage.LIGHT_BLUE_1, 8, 51, 1, this);
+		addLight(bluelight);
 		
-		bluelights[2] = new Bluelight(8, 56, SimImage.LIGHT_BLUE_1, 9, 34, 2, this);
-		bluelights[2].setEnabled(true);
-		
-		setBluelights(bluelights);
+		bluelight = new Bluelight(8, 56, SimImage.LIGHT_BLUE_1, 9, 34, 2, this);
+		addLight(bluelight);
 	}
 }

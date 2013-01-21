@@ -1,11 +1,11 @@
 package net.gerritk.fdsim;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 import net.gerritk.fdsim.entities.*;
 import net.gerritk.fdsim.entities.vehicles.*;
 import net.gerritk.fdsim.interfaces.*;
+import net.gerritk.fdsim.lists.EntityList;
 import net.gerritk.fdsim.resource.SimColor;
 import net.gerritk.fdsim.resource.SimFont;
 import net.gerritk.util.*;
@@ -15,7 +15,7 @@ public class Playground implements Drawable, DrawableGUI, Updateable {
 	
 	private int id;
 	private String title;
-	private ArrayList<Entity> entities;
+	private EntityList<Entity> entities;
 	private long startTime;
 	
 	private Dimension size;
@@ -26,7 +26,7 @@ public class Playground implements Drawable, DrawableGUI, Updateable {
 	
 	public Playground(String title, Dimension size, Point start, long startTime) {
 		this.id = lastID++;
-		this.entities = new ArrayList<Entity>();
+		this.entities = new EntityList<Entity>();
 		
 		setTitle(title);
 		setSize(size);
