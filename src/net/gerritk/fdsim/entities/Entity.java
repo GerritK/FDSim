@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
+import java.io.*;
 
 import net.gerritk.fdsim.Playground;
 import net.gerritk.fdsim.Simulation;
@@ -24,12 +25,19 @@ public abstract class Entity implements Drawable, DrawableGUI, Updateable {
 	private double rotation;
 	
 	public Entity(String name, int x, int y, BufferedImage img, Playground playground) {
-		
 		setName(name);
 		setImage(img);
 		setPlayground(playground);
 		setX(x);
 		setY(y);
+	}
+	
+	public static Entity fromFile(File file) {
+		Entity entity = null;
+		
+		// Add own FileStructure
+		
+		return entity;
 	}
 	
 	@Override
